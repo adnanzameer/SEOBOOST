@@ -9,7 +9,6 @@ using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
-using EPiServer.Web.Routing;
 using SeoBoost.Models;
 using SeoBoost.ViewModels;
 
@@ -17,14 +16,14 @@ namespace SeoBoost.Helper
 {
     public static class SeoHelper
     {
-        public static MvcHtmlString Internationalization()
+        public static MvcHtmlString Internationalization(this PageData page)
         {
             var alternates = new List<AlternativePageLink>();
             var domain = GetDomain();
 
             var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
 
-            GetAlternativePageLink(languages, domain, alternates);
+            GetAlternativePageLink(page.PageLink, languages, domain, alternates);
 
             var masterLanguage = languages.FirstOrDefault(l => l.ID == 1) ?? languages.FirstOrDefault();
 
@@ -41,12 +40,12 @@ namespace SeoBoost.Helper
                     siteLanguageList.Remove(link.Culture);
                 }
             }
-     
+
             foreach (var language in siteLanguageList)
             {
                 if (xDefault != null && language != null)
                 {
-                    var fallbackLanguages = ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(CurrentPageReference, language);
+                    var fallbackLanguages = ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(page.PageLink, language);
                     if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage.LanguageID))
                     {
                         var url = xDefault.Url.Replace("/" + masterLanguage.LanguageID.ToLower() + "/", "/" + language + "/");
@@ -65,15 +64,6 @@ namespace SeoBoost.Helper
             return htmlString;
         }
 
-        private static PageReference CurrentPageReference
-        {
-            get
-            {
-                var pageRouteHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-                return pageRouteHelper.PageLink;
-            }
-        }
-
         private static string GetDomain()
         {
             var domain = SiteDefinition.Current.SiteUrl.ToString();
@@ -89,10 +79,10 @@ namespace SeoBoost.Helper
             return domain;
         }
 
-        private static void GetAlternativePageLink(IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
+        private static void GetAlternativePageLink(PageReference currentPage, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var pageLanguages = contentRepository.GetLanguageBranches<PageData>(CurrentPageReference);
+            var pageLanguages = contentRepository.GetLanguageBranches<PageData>(currentPage);
 
             foreach (var language in languages)
             {
@@ -101,7 +91,7 @@ namespace SeoBoost.Helper
                     if (string.Equals(p.LanguageBranch.ToLower(), language.LanguageID.ToLower(),
                         StringComparison.Ordinal))
                     {
-                        var url = GenericFunctions.GetFriendlyUrl(CurrentPageReference, p.LanguageBranch);
+                        var url = GenericFunctions.GetFriendlyUrl(currentPage, p.LanguageBranch);
                         var host = domain;
                         if (!string.IsNullOrEmpty(url) && url.ToLower().Contains("//"))
                         {
@@ -152,6 +142,6 @@ namespace SeoBoost.Helper
 
             return MvcHtmlString.Create(sb.ToString());
         }
- 
+
     }
 }
