@@ -170,7 +170,7 @@
     <Compile Include="Helper\SeoHelper.cs" />
     <Compile Include="Models\AlternativePageLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\HreflangViewModel.cs" />
+    <Compile Include="ViewModels\InternationalizationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="modules\_protected\CMS\CMS.zip" />
