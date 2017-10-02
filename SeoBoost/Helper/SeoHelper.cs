@@ -9,6 +9,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
+using EPiServer.Web.Routing;
 using SeoBoost.Models;
 using SeoBoost.ViewModels;
 
@@ -16,14 +17,17 @@ namespace SeoBoost.Helper
 {
     public static class SeoHelper
     {
-        public static MvcHtmlString Internationalization(this PageData page)
+        public static MvcHtmlString Internationalization(this HtmlHelper html)
         {
             var alternates = new List<AlternativePageLink>();
             var domain = GetDomain();
 
             var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
 
-            GetAlternativePageLink(page.PageLink, languages, domain, alternates);
+            var requestContext = html.ViewContext.RequestContext;
+            var contentReference = requestContext.GetContentLink();
+
+            GetAlternativePageLink(contentReference, languages, domain, alternates);
 
             var masterLanguage = languages.FirstOrDefault(l => l.ID == 1) ?? languages.FirstOrDefault();
 
@@ -45,7 +49,7 @@ namespace SeoBoost.Helper
             {
                 if (xDefault != null && language != null)
                 {
-                    var fallbackLanguages = ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(page.PageLink, language);
+                    var fallbackLanguages = ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(contentReference, language);
                     if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage.LanguageID))
                     {
                         var url = xDefault.Url.Replace("/" + masterLanguage.LanguageID.ToLower() + "/", "/" + language + "/");
@@ -76,10 +80,10 @@ namespace SeoBoost.Helper
 
             if (domain.EndsWith("/"))
                 domain = domain.Substring(0, domain.Length - 1);
-            return domain;
+            return domain.ToLower();
         }
 
-        private static void GetAlternativePageLink(PageReference currentPage, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
+        private static void GetAlternativePageLink(ContentReference currentPage, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var pageLanguages = contentRepository.GetLanguageBranches<PageData>(currentPage);
@@ -130,7 +134,12 @@ namespace SeoBoost.Helper
             var sb = new StringBuilder();
 
             if (!string.IsNullOrEmpty(model.CanonicalUrl))
-                sb.AppendLine("<link rel=\"canonical\" href=\"" + domain + model.CanonicalUrl + "\" />");
+            {
+                if(model.CanonicalUrl.ToLower().Contains(domain))
+                    sb.AppendLine("<link rel=\"canonical\" href=\"" +  model.CanonicalUrl + "\" />");
+                else
+                    sb.AppendLine("<link rel=\"canonical\" href=\"" + domain + model.CanonicalUrl + "\" />");
+            }
 
             foreach (var alternate in model.Alternates)
             {

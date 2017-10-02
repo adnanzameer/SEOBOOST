@@ -6,5 +6,11 @@
 SeoBoost for EPiServer
 =====================
 
-SeoBoost for Episerver 10
+SeoBoost for Episerver 7.5, Episerver 8, Episerver 9 and Episerver 10
 
+
+## Usage:
+
+Include **@using SeoBoost.Helper** at top of the Mater page of the solution
+
+To add Canonical Link and Alternate Links use the following extension **@Html.Internationalization()** within **head** seaction 
