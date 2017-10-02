@@ -11,6 +11,7 @@ SeoBoost for Episerver 7.5, Episerver 8, Episerver 9 and Episerver 10
 
 ## Usage:
 
-Include __@using SeoBoost.Helper__ at top of the Mater page.
+Include the follow at top of the Mater page.
+ 	@using SeoBoost.Helper
 
 Use the following extension **@Html.Internationalization()** within **head** seaction to add Canonical Link and Alternate Links.
