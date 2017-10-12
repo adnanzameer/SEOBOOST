@@ -14,4 +14,5 @@ SeoBoost for Episerver 7.5, Episerver 8, Episerver 9 and Episerver 10
 Include the follow **@ using SeoBoost.Helper** at top of the Mater page.
  	
 
-Use the following extension **@Html.Internationalization()** within **<head></head>** seaction to add Canonical Link and Alternate Links.
+Use the following extension **@Html.GetCanonicalLink()** within **<head></head>** section to add Canonical Link.
+Use the following extension **@Html.GetAlternateLinks()** within **<head></head>** section to add Alternate Links.

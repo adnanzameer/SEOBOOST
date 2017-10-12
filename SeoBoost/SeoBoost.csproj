@@ -166,7 +166,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper\GenericFunctions.cs" />
+    <Compile Include="Business\DependencyResolver\DependencyResolver.cs" />
+    <Compile Include="Business\Url\IUrlService.cs" />
+    <Compile Include="Business\Url\UrlBuilder.cs" />
+    <Compile Include="Business\Url\UrlService.cs" />
     <Compile Include="Helper\SeoHelper.cs" />
     <Compile Include="Models\AlternativePageLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

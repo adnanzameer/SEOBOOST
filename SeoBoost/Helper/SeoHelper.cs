@@ -6,10 +6,9 @@ using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Globalization;
 using EPiServer.ServiceLocation;
-using EPiServer.Web;
 using EPiServer.Web.Routing;
+using SeoBoost.Business.Url;
 using SeoBoost.Models;
 using SeoBoost.ViewModels;
 
@@ -17,15 +16,15 @@ namespace SeoBoost.Helper
 {
     public static class SeoHelper
     {
-        public static MvcHtmlString Internationalization(this HtmlHelper html)
+        public static MvcHtmlString GetAlternateLinks(this HtmlHelper html)
         {
             var alternates = new List<AlternativePageLink>();
-            var domain = GetDomain();
-
+        
             var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
 
             var requestContext = html.ViewContext.RequestContext;
             var contentReference = requestContext.GetContentLink();
+            var domain = GetDomain(contentReference);
 
             GetAlternativePageLink(contentReference, languages, domain, alternates);
 
@@ -62,53 +61,35 @@ namespace SeoBoost.Helper
             #endregion
 
             var model = new InternationalizationViewModel(alternates);
-            ManageLinks(model, alternates, xDefault);
-            var htmlString = CreateHtmlString(model, domain);
+            if (xDefault != null && !string.IsNullOrEmpty(xDefault.Url))
+                model.XDefaultUrl = xDefault.Url;
+            var htmlString = CreateHtmlString(model);
 
             return htmlString;
         }
 
-        private static string GetDomain()
+        private static string GetDomain(ContentReference contentReference)
         {
-            var domain = SiteDefinition.Current.SiteUrl.ToString();
-
-            var hostDefinition =
-                SiteDefinition.Current.Hosts.FirstOrDefault(a => a.Type.Equals(HostDefinitionType.Primary));
-
-            if (hostDefinition != null)
-                domain = SiteDefinition.Current.SiteUrl.Scheme + "://" + hostDefinition.Name;
-
-            if (domain.EndsWith("/"))
-                domain = domain.Substring(0, domain.Length - 1);
-            return domain.ToLower();
+            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
+            return urlService.GetHost(contentReference);
         }
 
-        private static void GetAlternativePageLink(ContentReference currentPage, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
+        private static void GetAlternativePageLink(ContentReference contentReference, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var pageLanguages = contentRepository.GetLanguageBranches<PageData>(currentPage);
+            var pageLanguages = contentRepository.GetLanguageBranches<PageData>(contentReference);
+            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
 
+            var pagesData = pageLanguages as IList<PageData> ?? pageLanguages.ToList();
             foreach (var language in languages)
             {
-                foreach (var p in pageLanguages)
+                foreach (var p in pagesData)
                 {
                     if (string.Equals(p.LanguageBranch.ToLower(), language.LanguageID.ToLower(),
                         StringComparison.Ordinal))
                     {
-                        var url = GenericFunctions.GetFriendlyUrl(currentPage, p.LanguageBranch);
-                        var host = domain;
-                        if (!string.IsNullOrEmpty(url) && url.ToLower().Contains("//"))
-                        {
-                            var path = new Uri(url).AbsolutePath;
-                            url = "/" + language.LanguageID + path;
-                        }
-                        else if (string.Equals(url, "/"))
-                            url = "/" + language.LanguageID + "/";
-                        else if (!url.StartsWith("/" + language.LanguageID.ToLower() + "/"))
-                            url = "/" + language.LanguageID + url;
-
-                        var alternate =
-                            new AlternativePageLink(string.Format("{0}{1}", host, url), language.LanguageID);
+                        var url = urlService.GetExternalFriendlyUrl(contentReference, p.LanguageBranch);
+                        var alternate =new AlternativePageLink(url, language.LanguageID);
 
                         alternates.Add(alternate);
                         break;
@@ -117,29 +98,9 @@ namespace SeoBoost.Helper
             }
         }
 
-        private static void ManageLinks(InternationalizationViewModel model, List<AlternativePageLink> alternates, AlternativePageLink xDefault)
-        {
-            var currentLanguageBranch = ContentLanguage.PreferredCulture.Name;
-            var canonical = alternates.FirstOrDefault(a => string.Equals(a.Culture.ToLower(), currentLanguageBranch.ToLower()));
-
-            if (canonical != null && !string.IsNullOrEmpty(canonical.Url))
-                model.CanonicalUrl = canonical.Url;
-
-            if (xDefault != null && !string.IsNullOrEmpty(xDefault.Url))
-                model.XDefaultUrl = xDefault.Url;
-        }
-
-        private static MvcHtmlString CreateHtmlString(InternationalizationViewModel model, string domain)
+        private static MvcHtmlString CreateHtmlString(InternationalizationViewModel model)
         {
             var sb = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(model.CanonicalUrl))
-            {
-                if(model.CanonicalUrl.ToLower().Contains(domain))
-                    sb.AppendLine("<link rel=\"canonical\" href=\"" +  model.CanonicalUrl + "\" />");
-                else
-                    sb.AppendLine("<link rel=\"canonical\" href=\"" + domain + model.CanonicalUrl + "\" />");
-            }
 
             foreach (var alternate in model.Alternates)
             {
@@ -152,5 +113,15 @@ namespace SeoBoost.Helper
             return MvcHtmlString.Create(sb.ToString());
         }
 
+        public static MvcHtmlString GetCanonicalLink(this HtmlHelper html)
+        {
+            var requestContext = html.ViewContext.RequestContext;
+            var contentReference = requestContext.GetContentLink();
+            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("<link rel=\"canonical\" href=\"" + urlService.GetExternalFriendlyUrl(contentReference) + "\" />");
+            return MvcHtmlString.Create(sb.ToString());
+        }
     }
 }
