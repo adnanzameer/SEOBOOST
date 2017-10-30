@@ -10,7 +10,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using SeoBoost.Business.Url;
 using SeoBoost.Models;
-using SeoBoost.ViewModels;
+using SeoBoost.Models.ViewModels;
 
 namespace SeoBoost.Helper
 {
@@ -18,15 +18,18 @@ namespace SeoBoost.Helper
     {
         public static MvcHtmlString GetAlternateLinks(this HtmlHelper html)
         {
-            var alternates = new List<AlternativePageLink>();
-        
-            var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
-
             var requestContext = html.ViewContext.RequestContext;
             var contentReference = requestContext.GetContentLink();
-            var domain = GetDomain(contentReference);
 
-            GetAlternativePageLink(contentReference, languages, domain, alternates);
+            return GetAlternateLinks(contentReference);
+        }
+
+        public static MvcHtmlString GetAlternateLinks(this ContentReference contentReference)
+        {
+            var alternates = new List<AlternativePageLink>();
+            var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
+
+            GetAlternativePageLink(contentReference, languages, alternates);
 
             var masterLanguage = languages.FirstOrDefault(l => l.ID == 1) ?? languages.FirstOrDefault();
 
@@ -60,21 +63,61 @@ namespace SeoBoost.Helper
 
             #endregion
 
-            var model = new InternationalizationViewModel(alternates);
-            if (xDefault != null && !string.IsNullOrEmpty(xDefault.Url))
+            var model = new AlternativeLinkViewModel(alternates);
+            if (!string.IsNullOrEmpty(xDefault?.Url))
                 model.XDefaultUrl = xDefault.Url;
             var htmlString = CreateHtmlString(model);
 
             return htmlString;
         }
 
-        private static string GetDomain(ContentReference contentReference)
+        public static MvcHtmlString GetAlternateLinks(this PageData pageData)
         {
-            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
-            return urlService.GetHost(contentReference);
+            return GetAlternateLinks(pageData.ContentLink);
         }
 
-        private static void GetAlternativePageLink(ContentReference contentReference, IList<LanguageBranch> languages, string domain, List<AlternativePageLink> alternates)
+        public static MvcHtmlString GetCanonicalLink(this HtmlHelper html)
+        {
+            var requestContext = html.ViewContext.RequestContext;
+            var contentReference = requestContext.GetContentLink();
+            return GetCanonicalLink(contentReference);
+        }
+
+        public static MvcHtmlString GetCanonicalLink(this ContentReference contentReference)
+        {
+            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
+            var sb = new StringBuilder();
+            sb.AppendLine("<link rel=\"canonical\" href=\"" + urlService.GetExternalFriendlyUrl(contentReference) + "\" />");
+            return MvcHtmlString.Create(sb.ToString());
+        }
+
+        public static MvcHtmlString GetCanonicalLink(this PageData pageData)
+        {
+            return GetCanonicalLink(pageData.ContentLink);
+        }
+
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this ContentReference contentReference)
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var pageData = contentLoader.Get<PageData>(contentReference);
+
+            return GetBreadcrumbItemList(pageData);
+        }
+
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this PageData pageData)
+        {
+            var breadcrumbModel = new BreadcrumbsViewModel(pageData);
+            return breadcrumbModel.BreadcrumbItemList;
+        }
+
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this HtmlHelper html)
+        {
+            var requestContext = html.ViewContext.RequestContext;
+            var contentReference = requestContext.GetContentLink();
+
+            return GetBreadcrumbItemList(contentReference);
+        }
+        private static void GetAlternativePageLink(ContentReference contentReference, IList<LanguageBranch> languages, List<AlternativePageLink> alternates)
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var pageLanguages = contentRepository.GetLanguageBranches<PageData>(contentReference);
@@ -98,7 +141,7 @@ namespace SeoBoost.Helper
             }
         }
 
-        private static MvcHtmlString CreateHtmlString(InternationalizationViewModel model)
+        private static MvcHtmlString CreateHtmlString(AlternativeLinkViewModel model)
         {
             var sb = new StringBuilder();
 
@@ -113,15 +156,6 @@ namespace SeoBoost.Helper
             return MvcHtmlString.Create(sb.ToString());
         }
 
-        public static MvcHtmlString GetCanonicalLink(this HtmlHelper html)
-        {
-            var requestContext = html.ViewContext.RequestContext;
-            var contentReference = requestContext.GetContentLink();
-            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
-
-            var sb = new StringBuilder();
-            sb.AppendLine("<link rel=\"canonical\" href=\"" + urlService.GetExternalFriendlyUrl(contentReference) + "\" />");
-            return MvcHtmlString.Create(sb.ToString());
-        }
+       
     }
 }

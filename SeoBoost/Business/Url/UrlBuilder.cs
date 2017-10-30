@@ -28,7 +28,7 @@ namespace SeoBoost.Business.Url
         private Dictionary<string, string> _query = new Dictionary<string, string>();
         private Regex _regex;
 
-        private bool _endWithSeparator = false;
+        private bool _endWithSeparator;
 
         public UrlBuilder(ContentReference contentReference)
         {
@@ -132,7 +132,7 @@ namespace SeoBoost.Business.Url
                 ? splitPathAndQuery[1]
                 : string.Empty;
 
-            return this.SetPath(path)
+            return SetPath(path)
                 .SetQuery(query);
         }
 

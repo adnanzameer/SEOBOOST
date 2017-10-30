@@ -2,8 +2,8 @@
 {
     public class AlternativePageLink
     {
-        public string Url { get; set; }
-        public string Culture { get; set; }
+        public readonly string Url;
+        public readonly string Culture;
 
         public AlternativePageLink(string url, string culture)
         {
