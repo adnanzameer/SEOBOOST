@@ -22,13 +22,13 @@ namespace SeoBoost.Business.Url
         private const string QueryKeyValueSeparator = "=";
         private const string QueryParametersSeparator = "&";
 
-        private string _scheme;
+        private bool _endWithSeparator;
         private string _hostname;
         private List<string> _path = new List<string>();
         private Dictionary<string, string> _query = new Dictionary<string, string>();
         private Regex _regex;
 
-        private bool _endWithSeparator;
+        private string _scheme;
 
         public UrlBuilder(ContentReference contentReference)
         {
@@ -42,40 +42,35 @@ namespace SeoBoost.Business.Url
 
         public string GetExternalUrl()
         {
-            string url = $"{GetScheme()}{GetHost()}{GetPath()}{GetQuery()}";
+            var url = $"{GetScheme()}{GetHost()}{GetPath()}{GetQuery()}";
             return TransformUrl(url);
         }
 
         public string GetExternalUrlHost()
         {
-            string url = $"{GetScheme()}{GetHost()}";
+            var url = $"{GetScheme()}{GetHost()}";
             return TransformUrl(url);
         }
 
         public UrlBuilder AddMissingPathPart()
         {
             if (HttpContext.Current == null)
-            {
                 return this;
-            }
 
-            string currentUrl = GetScheme() + GetHost() + GetPath();
-            string contextUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+            var currentUrl = GetScheme() + GetHost() + GetPath();
+            var contextUrl = HttpContext.Current.Request.Url.AbsoluteUri;
 
             if (!contextUrl.StartsWith(currentUrl))
-            {
                 return this;
-            }
 
-            string missingUrlPart = contextUrl.Remove(0, currentUrl.Length);
-            int questionMarkPosition = missingUrlPart.IndexOf(QueryPathSeparator, 0, StringComparison.InvariantCultureIgnoreCase);
+            var missingUrlPart = contextUrl.Remove(0, currentUrl.Length);
+            var questionMarkPosition =
+                missingUrlPart.IndexOf(QueryPathSeparator, 0, StringComparison.InvariantCultureIgnoreCase);
 
             if (questionMarkPosition >= 0)
-            {
                 missingUrlPart = missingUrlPart.Remove(questionMarkPosition);
-            }
 
-            List<string> missingPath = missingUrlPart.Split(PathSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            var missingPath = missingUrlPart.Split(PathSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
             _path.AddRange(missingPath);
@@ -85,7 +80,7 @@ namespace SeoBoost.Business.Url
 
         private UrlBuilder SetPath(string path)
         {
-            List<string> pathParts = path.Split(PathSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            var pathParts = path.Split(PathSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
             return SetPath(pathParts);
@@ -99,15 +94,15 @@ namespace SeoBoost.Business.Url
 
         private UrlBuilder SetQuery(string query)
         {
-            string[] parameters = query.Split(QueryParametersSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var parameters = query.Split(QueryParametersSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             var queryDictionary = new Dictionary<string, string>();
 
-            foreach (string parameter in parameters)
+            foreach (var parameter in parameters)
             {
-                string[] keyValue = parameter.Split(QueryKeyValueSeparator.ToCharArray());
-                string key = keyValue[0];
-                string value = keyValue.Length == 2
+                var keyValue = parameter.Split(QueryKeyValueSeparator.ToCharArray());
+                var key = keyValue[0];
+                var value = keyValue.Length == 2
                     ? keyValue[1]
                     : string.Empty;
 
@@ -125,10 +120,10 @@ namespace SeoBoost.Business.Url
 
         private UrlBuilder SetPathAndQuery(string pathAndQuery)
         {
-            string[] splitPathAndQuery = pathAndQuery.Split(QueryPathSeparator[0]);
+            var splitPathAndQuery = pathAndQuery.Split(QueryPathSeparator[0]);
 
-            string path = splitPathAndQuery[0];
-            string query = splitPathAndQuery.Length > 1
+            var path = splitPathAndQuery[0];
+            var query = splitPathAndQuery.Length > 1
                 ? splitPathAndQuery[1]
                 : string.Empty;
 
@@ -136,13 +131,14 @@ namespace SeoBoost.Business.Url
                 .SetQuery(query);
         }
 
-        private void ExtractFromContentReference(ContentReference contentReference, string culture= null)
+        private void ExtractFromContentReference(ContentReference contentReference, string culture = null)
         {
             var repository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var pageData = repository.Get<PageData>(contentReference);
 
-            string url = !ContentReference.IsNullOrEmpty(contentReference)
-                ? UrlResolver.Current.GetUrl(contentReference, culture, new VirtualPathArguments { ContextMode = ContextMode.Default })
+            var url = !ContentReference.IsNullOrEmpty(contentReference)
+                ? UrlResolver.Current.GetUrl(contentReference, culture,
+                    new VirtualPathArguments {ContextMode = ContextMode.Default})
                 : string.Empty;
             if (!string.IsNullOrEmpty(url) && url.EndsWith("/"))
                 _endWithSeparator = true;
@@ -150,22 +146,18 @@ namespace SeoBoost.Business.Url
             ExtractFromString(url);
 
             if (!string.IsNullOrEmpty(pageData?.ExternalURL))
-            {
                 SetPathAndQuery(pageData.ExternalURL);
-            }
         }
 
         private void ExtractFromString(string url)
         {
             if (_regex == null)
-            {
                 _regex = new Regex(Pattern, RegexOptions.IgnoreCase);
-            }
 
-            Match match = url == null
+            var match = url == null
                 ? _regex.Match(string.Empty)
                 : _regex.Match(url);
-            Uri siteUrl = SiteDefinition.Current.SiteUrl;
+            var siteUrl = SiteDefinition.Current.SiteUrl;
 
             _scheme = match.Groups[RegexIndex.Scheme].Success
                 ? match.Groups[RegexIndex.Scheme].ToString()
@@ -175,13 +167,13 @@ namespace SeoBoost.Business.Url
                 ? match.Groups[RegexIndex.Host].ToString()
                 : siteUrl.Host;
 
-            string pathString = match.Groups[RegexIndex.Path].Success
+            var pathString = match.Groups[RegexIndex.Path].Success
                 ? match.Groups[RegexIndex.Path].ToString()
                 : string.Empty;
 
             SetPath(pathString);
 
-            string queryString = match.Groups[RegexIndex.Query].Success
+            var queryString = match.Groups[RegexIndex.Query].Success
                 ? match.Groups[RegexIndex.Query].ToString()
                 : string.Empty;
 
@@ -206,18 +198,14 @@ namespace SeoBoost.Business.Url
         {
             var stringBuilder = new StringBuilder();
 
-            foreach (string path in _path)
-            {
+            foreach (var path in _path)
                 stringBuilder.Append(PathSeparator)
                     .Append(path);
-            }
 
             if (_endWithSeparator)
-            {
                 stringBuilder.Append(PathSeparator);
-            }
 
-            string url = stringBuilder.ToString();
+            var url = stringBuilder.ToString();
 
             return url;
         }
@@ -227,15 +215,13 @@ namespace SeoBoost.Business.Url
             var stringBuilder = new StringBuilder();
             stringBuilder.Append(QueryPathSeparator);
 
-            foreach (KeyValuePair<string, string> parameter in _query)
-            {
+            foreach (var parameter in _query)
                 stringBuilder.Append(parameter.Key)
                     .Append(QueryKeyValueSeparator)
                     .Append(parameter.Value)
                     .Append(QueryParametersSeparator);
-            }
 
-            string query = stringBuilder.ToString();
+            var query = stringBuilder.ToString();
 
             return query.Remove(query.Length - 1);
         }

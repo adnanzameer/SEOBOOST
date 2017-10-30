@@ -7,6 +7,5 @@ namespace SeoBoost.Business.Url
         string GetExternalUrl(ContentReference contentReference);
         string GetExternalFriendlyUrl(ContentReference contentReference, string culture);
         string GetExternalFriendlyUrl(ContentReference contentReference);
-       
     }
 }

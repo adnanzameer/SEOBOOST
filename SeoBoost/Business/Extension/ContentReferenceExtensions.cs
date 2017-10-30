@@ -8,7 +8,7 @@ namespace SeoBoost.Business.Extension
     {
         public static string GetExternalUrl(this ContentReference contentReference)
         {
-            IUrlService urlService = ServiceLocator.Current.GetInstance<IUrlService>();
+            var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
             return urlService.GetExternalUrl(contentReference);
         }
     }

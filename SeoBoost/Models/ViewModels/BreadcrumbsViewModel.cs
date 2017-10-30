@@ -46,7 +46,6 @@ namespace SeoBoost.Models.ViewModels
                     breadcrumbItemList.Add(GetPageBreadcrumbElement(parent, false));
                 }
                 breadcrumbItemList.Add(GetPageBreadcrumbElement(currentPage, true));
-
             }
 
             return breadcrumbItemList;
@@ -59,18 +58,17 @@ namespace SeoBoost.Models.ViewModels
             if (parent != null)
             {
                 if (parent.CheckPublishedStatus(PagePublishedStatus.Published))
-                {
                     parents.Add(parent);
-                }
 
                 return GetParentBreadcrumbs(parent, ref parents);
             }
 
             return parents;
         }
+
         private BreadcrumbItemListElementViewModel GetPageBreadcrumbElement(PageData page, bool selected)
         {
-            string currentPageName = page.Name;
+            var currentPageName = page.Name;
 
             var breadcrumbCurrentPageElement = new BreadcrumbItemListElementViewModel(
                 currentPageName,

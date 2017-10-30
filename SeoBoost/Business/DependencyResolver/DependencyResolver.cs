@@ -10,7 +10,7 @@ namespace SeoBoost.Business.DependencyResolver
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            IServiceConfigurationProvider configurationProvider = context.Services;
+            var configurationProvider = context.Services;
             AddHybridServices(configurationProvider);
         }
 
