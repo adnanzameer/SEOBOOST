@@ -95,26 +95,30 @@ namespace SeoBoost.Helper
         }
 
         public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(
-            this ContentReference contentReference)
+            this ContentReference contentReference, ContentReference startPageReference = null)
         {
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var pageData = contentLoader.Get<PageData>(contentReference);
 
-            return GetBreadcrumbItemList(pageData);
+            return GetBreadcrumbItemList(pageData, startPageReference);
         }
 
-        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this PageData pageData)
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this PageData pageData, ContentReference startPageReference = null)
         {
-            var breadcrumbModel = new BreadcrumbsViewModel(pageData);
+            var reference = startPageReference;
+            if (reference == null || ContentReference.IsNullOrEmpty(reference))
+                reference = ContentReference.StartPage;
+
+            var breadcrumbModel = new BreadcrumbsViewModel(pageData, reference);
             return breadcrumbModel.BreadcrumbItemList;
         }
 
-        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this HtmlHelper html)
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this HtmlHelper html, ContentReference startPageReference = null)
         {
             var requestContext = html.ViewContext.RequestContext;
             var contentReference = requestContext.GetContentLink();
 
-            return GetBreadcrumbItemList(contentReference);
+            return GetBreadcrumbItemList(contentReference, startPageReference);
         }
 
         private static void GetAlternativePageLink(ContentReference contentReference, IList<LanguageBranch> languages,
@@ -126,16 +130,16 @@ namespace SeoBoost.Helper
 
             var pagesData = pageLanguages as IList<PageData> ?? pageLanguages.ToList();
             foreach (var language in languages)
-            foreach (var p in pagesData)
-                if (string.Equals(p.LanguageBranch.ToLower(), language.LanguageID.ToLower(),
-                    StringComparison.Ordinal))
-                {
-                    var url = urlService.GetExternalFriendlyUrl(contentReference, p.LanguageBranch);
-                    var alternate = new AlternativePageLink(url, language.LanguageID);
+                foreach (var p in pagesData)
+                    if (string.Equals(p.LanguageBranch.ToLower(), language.LanguageID.ToLower(),
+                        StringComparison.Ordinal))
+                    {
+                        var url = urlService.GetExternalFriendlyUrl(contentReference, p.LanguageBranch);
+                        var alternate = new AlternativePageLink(url, language.LanguageID);
 
-                    alternates.Add(alternate);
-                    break;
-                }
+                        alternates.Add(alternate);
+                        break;
+                    }
         }
 
         private static MvcHtmlString CreateHtmlString(AlternativeLinkViewModel model)

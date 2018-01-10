@@ -12,20 +12,22 @@ namespace SeoBoost.Models.ViewModels
 
         private int _index = 1;
 
-        public BreadcrumbsViewModel(PageData currentPage)
+        public BreadcrumbsViewModel(PageData currentPage, ContentReference startPageReference)
         {
-            BreadcrumbItemList = GetBreadcrumbItemList(currentPage);
+            BreadcrumbItemList = GetBreadcrumbItemList(currentPage, startPageReference);
         }
 
-        private List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(PageData currentPage)
+        private List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(PageData currentPage, ContentReference startPageReference = null)
         {
             var breadcrumbItemList = new List<BreadcrumbItemListElementViewModel>();
 
-            var startPageReference = ContentReference.StartPage;
+            PageData startPage;
+            if (startPageReference == null || ContentReference.IsNullOrEmpty(startPageReference))
+                startPage = GetStartPage(currentPage);
+            else
+                startPage = GetPageData(startPageReference);
 
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
 
-            var startPage = contentLoader.Get<PageData>(startPageReference);
             var startPageBreadcrumbElement = GetPageBreadcrumbElement(startPage, false);
             breadcrumbItemList.Add(startPageBreadcrumbElement);
 
@@ -41,7 +43,7 @@ namespace SeoBoost.Models.ViewModels
                 foreach (var parent in parents)
                 {
                     if (parent.PageLink.ID == root.ID) continue;
-                    if (parent.PageLink.ID == startPageReference.ID) continue;
+                    if (parent.PageLink.ID == startPage.ContentLink.ID) continue;
 
                     breadcrumbItemList.Add(GetPageBreadcrumbElement(parent, false));
                 }
@@ -51,7 +53,7 @@ namespace SeoBoost.Models.ViewModels
             return breadcrumbItemList;
         }
 
-        private ICollection<PageData> GetParentBreadcrumbs(PageData page, ref List<PageData> parents)
+        private static ICollection<PageData> GetParentBreadcrumbs(PageData page, ref List<PageData> parents)
         {
             var parent = page.GetParent();
 
@@ -64,6 +66,29 @@ namespace SeoBoost.Models.ViewModels
             }
 
             return parents;
+        }
+
+        private static PageData GetStartPage(PageData page)
+        {
+            var parent = page.GetParent();
+
+            if (parent != null)
+            {
+                if (parent.CheckPublishedStatus(PagePublishedStatus.Published) &&
+                    parent.PageLink.ID == ContentReference.RootPage.ID)
+                    return page;
+
+                return GetStartPage(parent);
+            }
+
+            return GetPageData(ContentReference.StartPage);
+        }
+
+        private static PageData GetPageData(ContentReference reference)
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var pageData = contentLoader.Get<PageData>(reference);
+            return pageData;
         }
 
         private BreadcrumbItemListElementViewModel GetPageBreadcrumbElement(PageData page, bool selected)
