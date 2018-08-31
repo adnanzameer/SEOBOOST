@@ -147,7 +147,7 @@ namespace SeoBoost.Helper
             var sb = new StringBuilder();
 
             foreach (var alternate in model.Alternates)
-                sb.AppendLine("<link rel=\"alternate\" href=\"" + alternate.Url + "\" hreflang=\"" + alternate.Culture +
+                sb.AppendLine("<link rel=\"alternate\" href=\"" + alternate.Url + "\" hreflang=\"" + alternate.Culture.ToLower() +
                               "\" />");
 
             if (!string.IsNullOrEmpty(model.XDefaultUrl))

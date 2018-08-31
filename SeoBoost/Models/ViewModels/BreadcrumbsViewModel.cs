@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
@@ -94,12 +95,17 @@ namespace SeoBoost.Models.ViewModels
         private BreadcrumbItemListElementViewModel GetPageBreadcrumbElement(PageData page, bool selected)
         {
             var currentPageName = page.Name;
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
 
             var breadcrumbCurrentPageElement = new BreadcrumbItemListElementViewModel(
                 currentPageName,
                 page.ContentLink.GetExternalUrl(),
                 IncrementIndex(),
-                selected, page.VisibleInMenu);
+                selected,
+                page.VisibleInMenu,
+                page.HasTemplate(),
+                contentLoader.GetChildren<PageData>(page.ContentLink).Any()
+                );
 
             return breadcrumbCurrentPageElement;
         }
