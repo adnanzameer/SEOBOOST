@@ -94,16 +94,13 @@ namespace SeoBoost.Models.ViewModels
 
         private BreadcrumbItemListElementViewModel GetPageBreadcrumbElement(PageData page, bool selected)
         {
-            var currentPageName = page.Name;
+
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
 
             var breadcrumbCurrentPageElement = new BreadcrumbItemListElementViewModel(
-                currentPageName,
-                page.ContentLink.GetExternalUrl(),
+                page,
                 IncrementIndex(),
                 selected,
-                page.VisibleInMenu,
-                page.HasTemplate(),
                 contentLoader.GetChildren<PageData>(page.ContentLink).Any()
                 );
 

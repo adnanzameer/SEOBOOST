@@ -5,7 +5,7 @@
     <title>SeoBoost</title>
     <description>SeoBoost for Episerver 11 - add hreflang atrributes, canonical tag and breadcrumbs</description>
     <releaseNotes>Initial release contains hreflang atrributes, canonical tag and breadcrumbs</releaseNotes>
-    <version>2.0.0</version>
+    <version>1.0.0</version>
     <authors>Adnan Zameer</authors>
     <owners>Adnan Zameer</owners>
     <licenseUrl>https://bitbucket.org/adnanzameer/seoboost/src/master/LICENSE.md</licenseUrl>
