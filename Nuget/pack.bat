@@ -10,7 +10,7 @@ md Package\tools\
 copy ..\SeoBoost\bin\Release\SeoBoost.dll Package\lib\net45\
 
 @Echo Packing files
-"..\.nuget\nuget.exe" pack Package\MenuPin.nuspec
+"..\.nuget\nuget.exe" pack Package\SeoBoost.nuspec
 
 @Echo Moving package
 move /Y *.nupkg c:\project\nuget.local\

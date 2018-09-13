@@ -3,18 +3,18 @@
   <metadata>
     <id>SeoBoost</id>
     <title>SeoBoost</title>
-    <description>SeoBoost for Episerver 10 - add hreflang atrributes and canonical tag</description>
-    <releaseNotes>Initial release contains hreflang atrributes and canonical tag</releaseNotes>
-    <version>10.1.4</version>
+    <description>SeoBoost for Episerver 11 - add hreflang atrributes, canonical tag and Breadcrumbs</description>
+    <releaseNotes>Initial release contains hreflang atrributes, canonical tag and Breadcrumbs</releaseNotes>
+    <version>2.0.0</version>
     <authors>Adnan Zameer</authors>
     <owners>Adnan Zameer</owners>
     <licenseUrl>https://github.com/davidknipe/MenuPin/blob/master/LICENSE.md</licenseUrl>
-    <projectUrl>http://www.david-tec.com/2015/10/menupin-for-episerver-10-released/</projectUrl>
-   	<iconUrl>http://www.david-tec.com/global/media/menupin/menupinnugeticon.png?v=10.1.3</iconUrl>
+    <projectUrl>http://www.adnanzameer.com</projectUrl>
+   	<iconUrl>https://drive.google.com/file/d/1xM8As7PtLnTizD3U6RDBTAbZKirxnWGm/preview</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>EPiServer SeoBoost</tags>
     <dependencies>
-      <dependency id="EPiServer.CMS.UI" version="[10.0, 11.0)" />
+      <dependency id="EPiServer.CMS.UI" version="[11.0, 12.0)" />
     </dependencies>
   </metadata>
 </package>
