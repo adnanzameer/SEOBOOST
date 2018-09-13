@@ -1,12 +1,9 @@
-[![Platform](https://img.shields.io/badge/Episerver-%207.5.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
-[![Platform](https://img.shields.io/badge/Episerver-%208.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
-[![Platform](https://img.shields.io/badge/Episerver-%209.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
-[![Platform](https://img.shields.io/badge/Episerver-%2010.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
+[![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
 SeoBoost for EPiServer
 =====================
 
-SeoBoost for Episerver 7.5, Episerver 8, Episerver 9 and Episerver 10
+SeoBoost for Episerver 11
 
 
 ## Usage:
@@ -18,3 +15,6 @@ Use the following extension **@Html.GetCanonicalLink()** within **<head></head>*
  	
 ### For Alternate Links
 Use the following extension **@Html.GetAlternateLinks()** within **<head></head>** section.
+
+### For Breadcrumbs Items
+Use the following extension **@Html.GetBreadcrumbItemList()** where required.

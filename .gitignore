@@ -176,4 +176,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-/Solution File/.vs/SeoBoost/v15/Server/sqlite3
+/Solution File/.vs/
