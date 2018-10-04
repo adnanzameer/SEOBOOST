@@ -4,10 +4,12 @@ del Package\content /s /q
 
 @Echo Setting up folder structure
 md Package\lib\net45\
+md Package\lib\net461\
 md Package\tools\
 
 @Echo Copying new files
 copy ..\SeoBoost\bin\Release\SeoBoost.dll Package\lib\net45\
+copy ..\SeoBoost\bin\Release\SeoBoost.dll Package\lib\net461\
 
 @Echo Packing files
 "..\.nuget\nuget.exe" pack Package\SeoBoost.nuspec
