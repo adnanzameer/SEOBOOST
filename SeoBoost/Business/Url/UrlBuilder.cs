@@ -134,7 +134,7 @@ namespace SeoBoost.Business.Url
         private void ExtractFromContentReference(ContentReference contentReference, string culture = null)
         {
             var repository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var pageData = repository.Get<PageData>(contentReference);
+            var pageData = repository.Get<IContent>(contentReference) as PageData;
 
             var url = !ContentReference.IsNullOrEmpty(contentReference)
                 ? UrlResolver.Current.GetUrl(contentReference, culture,

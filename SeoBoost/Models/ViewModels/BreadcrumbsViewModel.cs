@@ -3,12 +3,15 @@ using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 using SeoBoost.Business.Extension;
 
 namespace SeoBoost.Models.ViewModels
 {
     public class BreadcrumbsViewModel
     {
+        private static readonly Injected<IContentLoader> _contentLoader;
+
         public readonly List<BreadcrumbItemListElementViewModel> BreadcrumbItemList;
 
         private int _index = 1;
@@ -87,21 +90,19 @@ namespace SeoBoost.Models.ViewModels
 
         private static PageData GetPageData(ContentReference reference)
         {
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var pageData = contentLoader.Get<PageData>(reference);
+            
+            var pageData = _contentLoader.Service.Get<IContent>(reference) as PageData;
             return pageData;
         }
 
         private BreadcrumbItemListElementViewModel GetPageBreadcrumbElement(PageData page, bool selected)
         {
 
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-
             var breadcrumbCurrentPageElement = new BreadcrumbItemListElementViewModel(
                 page,
                 IncrementIndex(),
                 selected,
-                contentLoader.GetChildren<PageData>(page.ContentLink).Any()
+                _contentLoader.Service.GetChildren<PageData>(page.ContentLink).Any()
                 );
 
             return breadcrumbCurrentPageElement;

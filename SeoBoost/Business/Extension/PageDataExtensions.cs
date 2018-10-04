@@ -12,7 +12,7 @@ namespace SeoBoost.Business.Extension
                 return null;
 
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            return contentLoader.Get<PageData>(currentPage.ParentLink);
+            return contentLoader.Get<IContent>(currentPage.ParentLink) as PageData;
         }
 
         public static TResult GetParent<TResult>(this PageData currentPage)
@@ -22,7 +22,7 @@ namespace SeoBoost.Business.Extension
                 return null;
 
             var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var parent = contentLoader.Get<PageData>(currentPage.ParentLink);
+            var parent = contentLoader.Get<IContent>(currentPage.ParentLink) as PageData;
             if (parent == null)
                 return null;
 
