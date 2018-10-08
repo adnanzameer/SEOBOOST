@@ -4,8 +4,8 @@
     <id>SeoBoost</id>
     <title>SeoBoost</title>
     <description>SeoBoost for Episerver 11 - add hreflang atrributes, canonical tag and breadcrumbs</description>
-    <releaseNotes>Bug fixes: On-Page editing crash for blocks, Disable loading of canonical and alternative tags in edit mode. </releaseNotes>
-    <version>1.1.0</version>
+    <releaseNotes>Downgrade target framework from 4.7.1 to 4.6.1 </releaseNotes>
+    <version>1.2.0</version>
     <authors>Adnan Zameer</authors>
     <owners>Adnan Zameer</owners>
     <licenseUrl>https://bitbucket.org/adnanzameer/seoboost/src/master/LICENSE.md</licenseUrl>
