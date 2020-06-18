@@ -7,13 +7,13 @@ using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Controllers
 {
-    public class RobotsTxtController : Controller
+    public class SBRobotsTxtController : Controller
     {
-        //[ContentOutputCache]
+        [ContentOutputCache]
         public ActionResult Index()
         {
             var content = "";
-            var items = SeoHelper.FindPagesByPageTypeRecursively<RobotsTxt>(ContentReference.StartPage);
+            var items = SeoHelper.FindPagesByPageTypeRecursively<SBRobotsTxt>(ContentReference.StartPage);
             if (items != null && items.Any())
             {
                 content = items.First().RobotsTxtContent;

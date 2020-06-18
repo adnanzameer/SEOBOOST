@@ -160,10 +160,10 @@
     <Compile Include="Business\Url\IUrlService.cs" />
     <Compile Include="Business\Url\UrlBuilder.cs" />
     <Compile Include="Business\Url\UrlService.cs" />
-    <Compile Include="Controllers\RobotsTxtController.cs" />
+    <Compile Include="Controllers\SBRobotsTxtController.cs" />
     <Compile Include="Helper\SeoHelper.cs" />
     <Compile Include="Models\AlternativePageLink.cs" />
-    <Compile Include="Models\Pages\RobotsTxt.cs" />
+    <Compile Include="Models\Pages\SBRobotsTxt.cs" />
     <Compile Include="Models\ViewModels\BreadcrumbItemListElementViewModel.cs" />
     <Compile Include="Models\ViewModels\BreadcrumbsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -37,7 +37,7 @@ namespace SeoBoost.Business.Initialization
     {
         public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)
         {
-            if (args.ItemToRender is RobotsTxt)
+            if (args.ItemToRender is SBRobotsTxt)
             {
                 args.SelectedTemplate = null;
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -230,47 +231,45 @@ namespace SeoBoost.Helper
             return pageCriteriaQueryService.FindPagesWithCriteria(pageLink, criteria).Cast<TPageType>().ToList();
         }
 
-        public static void AddRoute()
+        public static async Task AddRoute()
         {
-            var proceed = true;
-            foreach (var routeBaseItem in RouteTable.Routes)
-            {
-                if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
-                {
-                    proceed = false;
-                    break;
-                }
-            }
+           await RemoveRoute();
 
-            if (proceed)
-            {
-                var route = RouteTable.Routes.MapRoute(
-                    "RobotsTxtRoute",
-                    "robots.txt",
-                    new { controller = "RobotsTxt", action = "Index" });
+            var route = RouteTable.Routes.MapRoute(
+                "RobotsTxtRoute",
+                "robots.txt",
+                new { controller = "SBRobotsTxt", action = "Index" });
 
-                RouteTable.Routes.Remove(route);
-                RouteTable.Routes.Insert(0, route);
-            }
+            RouteTable.Routes.Remove(route);
+            RouteTable.Routes.Insert(0, route);
         }
 
-        public static void RemoveRoute()
+        public static async Task RemoveRoute()
         {
-            var index = 0;
-            var proceed = false;
-            foreach (var routeBaseItem in RouteTable.Routes)
+            await Task.Run(() =>
             {
+                var index = RouteIndex();
+                while (index != -1)
+                {
+                    RouteTable.Routes.RemoveAt(index);
+                    index = RouteIndex();
+                }
+            });
+        }
+
+        private static int RouteIndex()
+        {
+            for (var i = 0; i < RouteTable.Routes.Count; i++)
+            {
+                var routeBaseItem = RouteTable.Routes[i];
                 if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
                 {
-                    proceed = true;
-                    break;
+                    return i;
                 }
 
-                index += 1;
             }
 
-            if (proceed)
-                RouteTable.Routes.RemoveAt(index);
+            return -1;
         }
     }
 }

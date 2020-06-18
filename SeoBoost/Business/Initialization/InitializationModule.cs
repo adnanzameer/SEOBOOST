@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Framework;
@@ -15,15 +16,15 @@ namespace SeoBoost.Business.Initialization
     {
         public void Initialize(InitializationEngine context)
         {
-            var items = SeoHelper.FindPagesByPageTypeRecursively<RobotsTxt>(ContentReference.StartPage);
+            var items = SeoHelper.FindPagesByPageTypeRecursively<SBRobotsTxt>(ContentReference.StartPage);
             if (items != null && items.Any())
             {
-                SeoHelper.AddRoute();
+                Task.Run(async () => await SeoHelper.AddRoute());
             }
             else
             {
                 var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-                var contentType = contentTypeRepository.Load<RobotsTxt>();
+                var contentType = contentTypeRepository.Load<SBRobotsTxt>();
                 var writableContentType = (ContentType)contentType.CreateWritableClone();
                 writableContentType.IsAvailable = true;
                 contentTypeRepository.Save(writableContentType);

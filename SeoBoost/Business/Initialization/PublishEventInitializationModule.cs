@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -18,7 +19,7 @@ namespace SeoBoost.Business.Initialization
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.PublishingContent += Instance_PublishingPage;
             contentEvents.CreatedContent += Instance_CreatedContent;
-            contentEvents.DeletedContent += Instance_DeletedContent;
+            contentEvents.DeletingContent += Instance_DeletingContent;
             contentEvents.MovingContent += ContentEvents_MovingContent;
         }
 
@@ -27,15 +28,15 @@ namespace SeoBoost.Business.Initialization
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.PublishingContent -= Instance_PublishingPage;
             contentEvents.CreatedContent -= Instance_CreatedContent;
-            contentEvents.DeletedContent -= Instance_DeletedContent;
+            contentEvents.DeletingContent -= Instance_DeletingContent;
             contentEvents.MovingContent -= ContentEvents_MovingContent;
         }
 
         private void Instance_PublishingPage(object sender, ContentEventArgs e)
         {
-            if (e.Content is RobotsTxt)
+            if (e.Content is SBRobotsTxt)
             {
-                SeoHelper.AddRoute();
+                Task.Run(async () => await SeoHelper.AddRoute());
             }
         }
 
@@ -47,7 +48,7 @@ namespace SeoBoost.Business.Initialization
             {
                 var contentType = repository.Load(e.Content.ContentTypeID);
 
-                if (e.Content is RobotsTxt)
+                if (e.Content is SBRobotsTxt)
                 {
                     var writableContentType = (ContentType)contentType.CreateWritableClone();
                     writableContentType.IsAvailable = false;
@@ -58,39 +59,31 @@ namespace SeoBoost.Business.Initialization
 
         private void ContentEvents_MovingContent(object sender, ContentEventArgs e)
         {
-            if (e.Content is RobotsTxt)
+            if (e.Content is SBRobotsTxt)
             {
                 if (e.TargetLink.ID == 2)
                 {
-                    SeoHelper.RemoveRoute();
+                    Task.Run(async () => await SeoHelper.RemoveRoute());
+                        
                 }
                 else if (((EPiServer.MoveContentEventArgs)e).OriginalParent.ID == 2)
                 {
-                    SeoHelper.AddRoute();
+                    
+                    Task.Run(async () => await SeoHelper.AddRoute());
                 }
             }
         }
 
-        private void Instance_DeletedContent(object sender, DeleteContentEventArgs e)
+        private void Instance_DeletingContent(object sender, DeleteContentEventArgs e)
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
 
-            var proceed = true;
-            if (e.Content is RobotsTxt)
-            {
-                var contentType = contentTypeRepository.Load(e.Content.ContentTypeID);
-                var writableContentType = (ContentType)contentType.CreateWritableClone();
-                writableContentType.IsAvailable = true;
-                contentTypeRepository.Save(writableContentType);
-                proceed = false;
-            }
-
-            if (proceed && e.DeletedDescendents != null && e.DeletedDescendents.Any())
+            if (e.DeletedDescendents != null && e.DeletedDescendents.Any())
             {
                 foreach (var cr in e.DeletedDescendents)
                 {
-                    var content = contentRepository.Get<IContent>(cr);
+                    contentRepository.TryGet(cr, out SBRobotsTxt content);
 
                     if (content != null)
                     {
@@ -104,6 +97,17 @@ namespace SeoBoost.Business.Initialization
                         }
 
                     }
+                }
+            }
+            else
+            {
+                contentRepository.TryGet(e.ContentLink, out SBRobotsTxt content);
+                if (content != null)
+                {
+                    var contentType = contentTypeRepository.Load(content.ContentTypeID);
+                    var writableContentType = (ContentType)contentType.CreateWritableClone();
+                    writableContentType.IsAvailable = true;
+                    contentTypeRepository.Save(writableContentType);
                 }
             }
 
