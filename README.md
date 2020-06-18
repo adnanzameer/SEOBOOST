@@ -1,9 +1,9 @@
 [![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
-SeoBoost for EPiServer
+SEOBOOST for EPiServer
 =====================
 
-SeoBoost for Episerver 11
+SEOBOOST for Episerver 11
 
 
 ## Usage:

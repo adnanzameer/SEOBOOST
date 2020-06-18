@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Editor;
+using EPiServer.Filters;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using SeoBoost.Business.Url;
@@ -112,7 +116,7 @@ namespace SeoBoost.Helper
 
         public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this PageData pageData, ContentReference startPageReference = null)
         {
-            if(IsBlockContext)
+            if (IsBlockContext)
                 return new List<BreadcrumbItemListElementViewModel>();
 
             if (pageData == null)
@@ -205,6 +209,68 @@ namespace SeoBoost.Helper
 
                 return false;
             }
+        }
+
+        public static IEnumerable<TPageType> FindPagesByPageTypeRecursively<TPageType>(PageReference pageLink) where TPageType : IContent
+        {
+            var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
+            var pageCriteriaQueryService = ServiceLocator.Current.GetInstance<IPageCriteriaQueryService>();
+
+            var criteria = new PropertyCriteriaCollection
+            {
+                new PropertyCriteria
+                {
+                    Name = "PageTypeID",
+                    Type = PropertyDataType.PageType,
+                    Condition = CompareCondition.Equal,
+                    Value = contentTypeRepository.Load<TPageType>().ID.ToString(CultureInfo.InvariantCulture)
+                }
+            };
+
+            return pageCriteriaQueryService.FindPagesWithCriteria(pageLink, criteria).Cast<TPageType>().ToList();
+        }
+
+        public static void AddRoute()
+        {
+            var proceed = true;
+            foreach (var routeBaseItem in RouteTable.Routes)
+            {
+                if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
+                {
+                    proceed = false;
+                    break;
+                }
+            }
+
+            if (proceed)
+            {
+                var route = RouteTable.Routes.MapRoute(
+                    "RobotsTxtRoute",
+                    "robots.txt",
+                    new { controller = "RobotsTxt", action = "Index" });
+
+                RouteTable.Routes.Remove(route);
+                RouteTable.Routes.Insert(0, route);
+            }
+        }
+
+        public static void RemoveRoute()
+        {
+            var index = 0;
+            var proceed = false;
+            foreach (var routeBaseItem in RouteTable.Routes)
+            {
+                if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
+                {
+                    proceed = true;
+                    break;
+                }
+
+                index += 1;
+            }
+
+            if (proceed)
+                RouteTable.Routes.RemoveAt(index);
         }
     }
 }
