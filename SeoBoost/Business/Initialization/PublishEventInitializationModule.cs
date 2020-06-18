@@ -34,10 +34,6 @@ namespace SeoBoost.Business.Initialization
                 {
                     Task.Run(async () => await SeoHelper.RemoveRoute());
                 }
-                else
-                {
-                    Task.Run(async () => await SeoHelper.AddRoute());
-                }
             }
         }
 
