@@ -212,25 +212,6 @@ namespace SeoBoost.Helper
             }
         }
 
-        public static IEnumerable<TPageType> FindPagesByPageTypeRecursively<TPageType>(PageReference pageLink) where TPageType : IContent
-        {
-            var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-            var pageCriteriaQueryService = ServiceLocator.Current.GetInstance<IPageCriteriaQueryService>();
-
-            var criteria = new PropertyCriteriaCollection
-            {
-                new PropertyCriteria
-                {
-                    Name = "PageTypeID",
-                    Type = PropertyDataType.PageType,
-                    Condition = CompareCondition.Equal,
-                    Value = contentTypeRepository.Load<TPageType>().ID.ToString(CultureInfo.InvariantCulture)
-                }
-            };
-
-            return pageCriteriaQueryService.FindPagesWithCriteria(pageLink, criteria).Cast<TPageType>().ToList();
-        }
-
         public static async Task AddRoute()
         {
            await RemoveRoute();

@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using EPiServer;
 using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using EPiServer.Web.Mvc;
-using SeoBoost.Helper;
 using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Controllers
@@ -12,8 +13,10 @@ namespace SeoBoost.Controllers
         [ContentOutputCache]
         public ActionResult Index()
         {
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var items = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
+
             var content = "";
-            var items = SeoHelper.FindPagesByPageTypeRecursively<SBRobotsTxt>(ContentReference.StartPage);
             if (items != null && items.Any())
             {
                 content = items.First().RobotsTxtContent;

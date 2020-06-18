@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using EPiServer;
 using EPiServer.Core;
-using EPiServer.DataAbstraction;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
@@ -16,18 +16,22 @@ namespace SeoBoost.Business.Initialization
     {
         public void Initialize(InitializationEngine context)
         {
-            var items = SeoHelper.FindPagesByPageTypeRecursively<SBRobotsTxt>(ContentReference.StartPage);
-            if (items != null && items.Any())
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var content = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
+
+            if (content == null || !content.Any())
             {
+                var robotsTxtPage = contentRepository.GetDefault<SBRobotsTxt>(ContentReference.StartPage);
+                robotsTxtPage.PageName = "Robots.txt";
+                robotsTxtPage.VisibleInMenu = false;
+                robotsTxtPage.RobotsTxtContent = "User-agent: *";
+                contentRepository.Save(robotsTxtPage, EPiServer.DataAccess.SaveAction.Publish, EPiServer.Security.AccessLevel.NoAccess);
+
                 Task.Run(async () => await SeoHelper.AddRoute());
             }
-            else
+            else if(!content.First().DisableFeature)
             {
-                var contentTypeRepository = ServiceLocator.Current.GetInstance<IContentTypeRepository>();
-                var contentType = contentTypeRepository.Load<SBRobotsTxt>();
-                var writableContentType = (ContentType)contentType.CreateWritableClone();
-                writableContentType.IsAvailable = true;
-                contentTypeRepository.Save(writableContentType);
+                Task.Run(async () => await SeoHelper.AddRoute());
             }
         }
 
