@@ -4,7 +4,7 @@ using EPiServer.ServiceLocation;
 
 namespace SeoBoost.Business.Extension
 {
-    public static class PageDataExtensions
+    internal static class PageDataExtensions
     {
         public static PageData GetParent(this PageData currentPage)
         {
@@ -26,8 +26,8 @@ namespace SeoBoost.Business.Extension
             if (parent == null)
                 return null;
 
-            if (parent is TResult)
-                return parent as TResult;
+            if (parent is TResult result)
+                return result;
 
             return GetParent<TResult>(parent);
         }
