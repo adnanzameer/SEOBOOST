@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
@@ -16,14 +17,18 @@ namespace SeoBoost.Controllers
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var items = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
 
-            var content = "";
-            if (items != null && items.Any())
+            var content = "User-agent: *";
+            if (items != null)
             {
-                content = items.First().RobotsTxtContent;
+                var robotTxtPages = items.ToList();
+
+                if (robotTxtPages.Any())
+                    content = robotTxtPages.First().RobotsTxtContent;
             }
 
-            return Content(content, "text/plain");
+            return Content(content, "text/plain", Encoding.UTF8);
         }
+
     }
 }
 

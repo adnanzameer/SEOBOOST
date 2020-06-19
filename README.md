@@ -40,6 +40,8 @@ The Robots.txt page (backed by SBRobotsTxt PageType) will automatically be creat
 
 The physical rebots.txt file content (if any) will be replaced with the CMS robobts.txt page content. The fallback behaviour of /robots.txt URL is the content of physical rebots.txt file (if any) otherwise the default 404 error page will be shown.
 
+IMPORTANT: If there is a physical robot.txt exist in the site root, always purged the CDN cache after the deploy or site restart. For a seamless experience, it is a recommendation to delete physical robots.txt file from the site root if you want to use editable robot.txt.
+
 There are restrictions in place to move (change parent) or delete the Rebots.txt page. 
 
 ![robots.txt restrictions](assets/docsimages/image003.png)

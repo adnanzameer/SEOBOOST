@@ -19,18 +19,23 @@ namespace SeoBoost.Business.Initialization
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var content = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
 
-            if (content == null || !content.Any())
+            if (content != null)
             {
-                var robotsTxtPage = contentRepository.GetDefault<SBRobotsTxt>(ContentReference.StartPage);
-                robotsTxtPage.PageName = "Robots.txt";
-                robotsTxtPage.VisibleInMenu = false;
-                robotsTxtPage.DisableFeature = true;
-                robotsTxtPage.RobotsTxtContent = "User-agent: *";
-                contentRepository.Save(robotsTxtPage, EPiServer.DataAccess.SaveAction.Publish, EPiServer.Security.AccessLevel.NoAccess);
-            }
-            else if(!content.First().DisableFeature)
-            {
-                Task.Run(async () => await SeoHelper.AddRoute());
+                var list = content.ToList();
+
+                if (!list.Any())
+                {
+                    var robotsTxtPage = contentRepository.GetDefault<SBRobotsTxt>(ContentReference.StartPage);
+                    robotsTxtPage.PageName = "Robots.txt";
+                    robotsTxtPage.VisibleInMenu = false;
+                    robotsTxtPage.DisableFeature = true;
+                    robotsTxtPage.RobotsTxtContent = "User-agent: *";
+                    contentRepository.Save(robotsTxtPage, EPiServer.DataAccess.SaveAction.Publish, EPiServer.Security.AccessLevel.NoAccess);
+                }
+                else if (!list.First().DisableFeature)
+                {
+                    Task.Run(async () => await SeoHelper.AddRoute());
+                }
             }
         }
 
