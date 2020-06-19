@@ -152,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\DependencyResolver\DependencyResolver.cs" />
-    <Compile Include="Business\Extension\ContentReferenceExtensions.cs" />
     <Compile Include="Business\Extension\PageDataExtensions.cs" />
     <Compile Include="Business\Initialization\CustomizedRenderingInitialization.cs" />
     <Compile Include="Business\Initialization\InitializationModule.cs" />

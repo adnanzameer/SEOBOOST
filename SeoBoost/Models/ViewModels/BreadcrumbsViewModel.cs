@@ -3,7 +3,6 @@ using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 using SeoBoost.Business.Extension;
 
 namespace SeoBoost.Models.ViewModels

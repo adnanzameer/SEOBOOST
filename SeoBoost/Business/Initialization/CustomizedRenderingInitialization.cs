@@ -8,7 +8,7 @@ using SeoBoost.Models.Pages;
 namespace SeoBoost.Business.Initialization
 {
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class CustomizedRenderingInitialization : IInitializableModule
+    internal class CustomizedRenderingInitialization : IInitializableModule
     {
         public void Initialize(InitializationEngine context)
         {
@@ -28,7 +28,7 @@ namespace SeoBoost.Business.Initialization
     }
 
     [ServiceConfiguration(typeof(IViewTemplateModelRegistrator))]
-    public class TemplateCoordinator : IViewTemplateModelRegistrator
+    internal class TemplateCoordinator : IViewTemplateModelRegistrator
     {
         public static void OnTemplateResolved(object sender, TemplateResolverEventArgs args)
         {

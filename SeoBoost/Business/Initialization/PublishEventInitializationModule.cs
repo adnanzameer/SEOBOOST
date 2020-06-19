@@ -10,7 +10,7 @@ using SeoBoost.Models.Pages;
 namespace SeoBoost.Business.Initialization
 {
     [InitializableModule]
-    public class SavePublishEventInitializationModule : IInitializableModule
+    internal class SavePublishEventInitializationModule : IInitializableModule
     {
         public void Initialize(InitializationEngine context)
         {

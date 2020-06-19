@@ -12,7 +12,7 @@ using EPiServer.Web.Routing;
 
 namespace SeoBoost.Business.Url
 {
-    public class UrlBuilder
+    internal class UrlBuilder
     {
         private const string Pattern = @"^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?";
         private const string SchemeSeparator = "://";
@@ -165,7 +165,7 @@ namespace SeoBoost.Business.Url
 
             _hostname = match.Groups[RegexIndex.Host].Success
                 ? match.Groups[RegexIndex.Host].ToString()
-                : siteUrl.Host;
+                : siteUrl?.Host;
 
             var pathString = match.Groups[RegexIndex.Path].Success
                 ? match.Groups[RegexIndex.Path].ToString()

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Editor;
-using EPiServer.Filters;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using SeoBoost.Business.Url;
@@ -43,7 +40,7 @@ namespace SeoBoost.Helper
             var masterLanguage = languages.FirstOrDefault(l => l.ID == 1) ?? languages.FirstOrDefault();
 
             var xDefault =
-                alternates.FirstOrDefault(a => string.Equals(a.Culture.ToLower(), masterLanguage.LanguageID.ToLower()));
+                alternates.FirstOrDefault(a => string.Equals(a.Culture.ToLower(), masterLanguage?.LanguageID.ToLower()));
 
             var siteLanguageList = languages.Select(language => language.LanguageID).ToList();
 
@@ -58,9 +55,9 @@ namespace SeoBoost.Helper
                 {
                     var fallbackLanguages =
                         ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(contentReference, language);
-                    if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage.LanguageID))
+                    if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage?.LanguageID))
                     {
-                        var url = xDefault.Url.Replace("/" + masterLanguage.LanguageID.ToLower() + "/",
+                        var url = xDefault.Url.Replace("/" + masterLanguage?.LanguageID.ToLower() + "/",
                             "/" + language + "/");
                         var alternate = new AlternativePageLink(url, language);
                         alternates.Add(alternate);
@@ -204,15 +201,11 @@ namespace SeoBoost.Helper
             get
             {
                 var contentRouteHelper = ServiceLocator.Current.GetInstance<IContentRouteHelper>();
-                var content = contentRouteHelper.Content as BlockData;
-                if (content != null)
-                    return true;
-
-                return false;
+                return contentRouteHelper.Content is BlockData;
             }
         }
 
-        public static async Task AddRoute()
+        internal static async Task AddRoute()
         {
            await RemoveRoute();
 
@@ -225,7 +218,7 @@ namespace SeoBoost.Helper
             RouteTable.Routes.Insert(0, route);
         }
 
-        public static async Task RemoveRoute()
+        internal static async Task RemoveRoute()
         {
             await Task.Run(() =>
             {
