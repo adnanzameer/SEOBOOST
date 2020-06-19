@@ -12,7 +12,7 @@
     <projectUrl>https://github.com/adnanzameer/SEOBOOST/</projectUrl>
    	<iconUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/boost.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>SEO hreflang alternate links canonical tag breadcrumbs robots.txt internationalization</tags>
+    <tags>seo hreflang alternate links canonical tag breadcrumbs robots.txt internationalization</tags>
     <dependencies>
       <dependency id="EPiServer.CMS.UI" version="[11.0, 12.0)" />
     </dependencies>

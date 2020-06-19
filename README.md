@@ -3,31 +3,31 @@
 # SEOBOOST for EPiServer
 
 ## Description
-This package acilitates developers and editors to improve the SEO ranking of the website by utalizing helper methods & features provided.
+This package facilitates developers and editors to improve the SEO ranking of the website by utilizing helper methods & features provided.
 
 ## Features
 The package provides the following helper methods & features:
 * Canonical Link 
-* hreflang attributes (Alternate Links)
-* Breadcrumbs Items
+* Alternate Links (hreflang attributes)
+* Breadcrumbs items
 * robots.txt
 
 ## How to install
 Install NuGet package from Episerver NuGet Feed:
 
-	Install-Package SeoBoost
+    Install-Package SeoBoost
 
 ## How to use
 
 Include the follow **@ using SeoBoost.Helper** at top of the Mater page.
      
-### For Canonical Link
+### Canonical link
 Use the following extension **@Html.GetCanonicalLink()** within **<head></head>** section.
      
-### For Alternate Links
+### Alternate links (hreflang attributes)
 Use the following extension **@Html.GetAlternateLinks()** within **<head></head>** section.
 
-### For Breadcrumbs Items
+### Breadcrumbs items
 Use the following extension **@Html.GetBreadcrumbItemList()** where required.
 
 ### robots.txt
@@ -51,14 +51,14 @@ The editable robot.txt feature is disabled by default and can be enabled by sett
 
 ### Additional helper methods
 
-There are some helper methods in the packageto get external URLs of the the page. Developer can use these methods for thier own implementations 
+There are some helper methods in the package to get external URLs of the page. The developer can use these methods for their implementations 
 
 usage 
 
       var urlHelper = ServiceLocator.Current.GetInstance<SeoBoost.Business.Url.IUrlService>();
 
 
-There are three method available to get external url for the content 
+There are three methods available to get external URL for the content 
 
        string GetExternalUrl(ContentReference contentReference);
        string GetExternalFriendlyUrl(ContentReference contentReference, string culture);
