@@ -34,16 +34,27 @@ namespace SeoBoost.Business.Initialization
                 {
                     Task.Run(async () => await SeoHelper.RemoveRoute());
                 }
+                else
+                {
+                    Task.Run(async () => await SeoHelper.AddRoute());
+                }
             }
         }
 
         private void ContentEvents_MovingContent(object sender, ContentEventArgs e)
         {
-            if (e.Content is SBRobotsTxt && e.TargetLink.ID != ContentReference.StartPage.ID)
+            if (e.Content is SBRobotsTxt)
             {
-                var action = e.TargetLink == ContentReference.WasteBasket ? "remove" : "move";
-                e.CancelAction = true;
-                e.CancelReason = $"You can't {action} the page. This page is a part of SEOBOOST package. Manage robot.txt settings trough the page properties.";
+                if (e.TargetLink.ID != ContentReference.StartPage.ID)
+                {
+                    var action = e.TargetLink == ContentReference.WasteBasket ? "remove" : "move";
+                    e.CancelAction = true;
+                    e.CancelReason = $"You can't {action} the page. This page is a part of SEOBOOST package. Manage robot.txt settings trough the page properties.";
+                }
+                else
+                {
+                    Task.Run(async () => await SeoHelper.RemoveRoute());
+                }
             }
         }
     }
