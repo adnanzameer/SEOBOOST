@@ -41,17 +41,17 @@ Example:
             {
                 <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">Home</a></li>
             }
-            else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(Model.ContentLink))
+            else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
             {
-                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">@PageHelper.GetShortPageName(breadCrumbItem.PageData)</a></li>
+                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">@breadCrumbItem.PageData.PageName</a></li>
             }
             else if (breadCrumbItem.Selected)
             {
-                <li>@PageHelper.GetShortPageName(breadCrumbItem.PageData)</li>
+                <li>@breadCrumbItem.PageData.PageName</li>
             }
             else
             {
-                <li>@PageHelper.GetShortPageName(breadCrumbItem.PageData)</li>
+                <li>@breadCrumbItem.PageData.PageName</li>
             }
 
             if (breadCrumbItem.Position != breadCrumbList.Count)
