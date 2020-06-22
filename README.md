@@ -29,6 +29,7 @@ Use the following extension **@Html.GetAlternateLinks()** within **<head></head>
 
 ### Breadcrumbs items
 Use the following extension **@Html.GetBreadcrumbItemList()** where required.
+
 Example:
                     
     <ul>
