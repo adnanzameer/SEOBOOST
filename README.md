@@ -30,6 +30,37 @@ Use the following extension **@Html.GetAlternateLinks()** within **<head></head>
 ### Breadcrumbs items
 Use the following extension **@Html.GetBreadcrumbItemList()** where required.
 
+Example:
+                    
+    <ul>
+        @{ var breadCrumbList = Html.GetBreadcrumbItemList(ContentReference.StartPage); }
+
+        @foreach (var breadCrumbItem in breadCrumbList)
+        {
+            if (breadCrumbItem.Position == 1)
+            {
+                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">Home</a></li>
+            }
+            else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
+            {
+                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">@breadCrumbItem.PageData.PageName</a></li>
+            }
+            else if (breadCrumbItem.Selected)
+            {
+                <li>@breadCrumbItem.PageData.PageName</li>
+            }
+            else
+            {
+                <li>@breadCrumbItem.PageData.PageName</li>
+            }
+
+            if (breadCrumbItem.Position != breadCrumbList.Count)
+            {
+                <li class="spacer">/</li>
+            }
+        }
+    </ul>
+
 ### robots.txt
 
 The idea behind this feature is simple, provide editors with the flexibility to change robots.txt file on the go. 
