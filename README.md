@@ -32,35 +32,37 @@ Use the following extension **@Html.GetBreadcrumbItemList()** where required.
 
 Example:
                     
-    <ul>
-        @{ var breadCrumbList = Html.GetBreadcrumbItemList(ContentReference.StartPage); }
+       @{ var breadCrumbList = Html.GetBreadcrumbItemList(ContentReference.StartPage); }
 
-        @foreach (var breadCrumbItem in breadCrumbList)
-        {
-            if (breadCrumbItem.Position == 1)
-            {
-                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">Home</a></li>
+       <ol class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
+            @{
+                int count = 1;
+                foreach (var item in breadCrumbList)
+                {
+                    if (item.Selected)
+                    {
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="active">
+                            <span itemprop="name">@item.PageData.PageName</span>
+                            <meta content="@count" itemprop="position">
+                        </li>
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(item.Url))
+                        {
+                            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <a href="@Url.ContentUrl(item.Url)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
+                                    <span itemprop="name">@item.PageData.PageName</span>
+                                </a>
+                                <meta content="@count" itemprop="position">
+                            </li>
+                        }
+                    }
+                    count = count + 1;
+                }
             }
-            else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
-            {
-                <li><a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">@breadCrumbItem.PageData.PageName</a></li>
-            }
-            else if (breadCrumbItem.Selected)
-            {
-                <li>@breadCrumbItem.PageData.PageName</li>
-            }
-            else
-            {
-                <li>@breadCrumbItem.PageData.PageName</li>
-            }
-
-            if (breadCrumbItem.Position != breadCrumbList.Count)
-            {
-                <li class="spacer">/</li>
-            }
-        }
-    </ul>
-
+        </ol> 
+       
 ### robots.txt
 
 The idea behind this feature is simple, provide editors with the flexibility to change robots.txt file on the go. 
