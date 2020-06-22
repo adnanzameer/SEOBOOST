@@ -29,6 +29,40 @@ Use the following extension **@Html.GetAlternateLinks()** within **<head></head>
 
 ### Breadcrumbs items
 Use the following extension **@Html.GetBreadcrumbItemList()** where required.
+Example:
+                    <ul>
+                        @{ var breadCrumbList = Html.GetBreadcrumbItemList(ContentReference.StartPage); }
+
+                        @foreach (var breadCrumbItem in breadCrumbList)
+                        {
+                            if (breadCrumbItem.Position == 1)
+                            {
+                                <li>
+                                    <a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">Home</a>
+                                </li>
+
+                            }
+                            else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(Model.ContentLink))
+                            {
+                                <li>
+                                    <a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)">@PageHelper.GetShortPageName(breadCrumbItem.PageData)</a>
+                                </li>
+                            }
+                            else if (breadCrumbItem.Selected)
+                            {
+                                <li>@PageHelper.GetShortPageName(breadCrumbItem.PageData)</li>
+                            }
+                            else
+                            {
+                                <li>@PageHelper.GetShortPageName(breadCrumbItem.PageData)</li>
+                            }
+
+                            if (breadCrumbItem.Position != breadCrumbList.Count)
+                            {
+                                <li class="spacer">/</li>
+                            }
+                        }
+                    </ul>
 
 ### robots.txt
 
