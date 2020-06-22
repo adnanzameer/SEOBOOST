@@ -36,14 +36,13 @@ Example:
 
        <ol class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">
             @{
-                int count = 1;
                 foreach (var item in breadCrumbList)
                 {
                     if (item.Selected)
                     {
                         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="active">
                             <span itemprop="name">@item.PageData.PageName</span>
-                            <meta content="@count" itemprop="position">
+                            <meta content="@item.Position" itemprop="position">
                         </li>
                     }
                     else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
@@ -52,18 +51,16 @@ Example:
                             <a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
                                 <span itemprop="name">@item.PageData.PageName</span>
                             </a>
-                            <meta content="@count" itemprop="position">
+                            <meta content="@item.Position" itemprop="position">
                         </li>
                     }
                     else //OPTIONAL
                     {
                         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                             <span itemprop="name">@item.PageData.PageName</span>
-                            <meta content="@count" itemprop="position">
+                            <meta content="@item.Position" itemprop="position">
                         </li>
-                    }
-                    
-                    count = count + 1;
+                    }                   
                 }
             }
         </ol> 
