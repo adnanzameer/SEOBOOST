@@ -46,18 +46,23 @@ Example:
                             <meta content="@count" itemprop="position">
                         </li>
                     }
-                    else
+                    else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
                     {
-                        if (!string.IsNullOrEmpty(item.Url))
-                        {
-                            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                                <a href="@Url.ContentUrl(item.Url)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
-                                    <span itemprop="name">@item.PageData.PageName</span>
-                                </a>
-                                <meta content="@count" itemprop="position">
-                            </li>
-                        }
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
+                                <span itemprop="name">@item.PageData.PageName</span>
+                            </a>
+                            <meta content="@count" itemprop="position">
+                        </li>
                     }
+                    else //OPTIONAL
+                    {
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <span itemprop="name">@item.PageData.PageName</span>
+                            <meta content="@count" itemprop="position">
+                        </li>
+                    }
+                    
                     count = count + 1;
                 }
             }
