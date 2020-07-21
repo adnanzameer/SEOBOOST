@@ -3,8 +3,6 @@ using System.Linq;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
-using SeoBoost.Business.Extension;
 
 namespace SeoBoost.Models.ViewModels
 {
@@ -59,7 +57,7 @@ namespace SeoBoost.Models.ViewModels
 
         private static ICollection<PageData> GetParentBreadcrumbs(PageData page, ref List<PageData> parents)
         {
-            var parent = page.GetParent();
+            var parent = GetParent(page);
 
             if (parent != null)
             {
@@ -74,7 +72,7 @@ namespace SeoBoost.Models.ViewModels
 
         private static PageData GetStartPage(PageData page)
         {
-            var parent = page.GetParent();
+            var parent = GetParent(page);
 
             if (parent != null)
             {
@@ -111,6 +109,14 @@ namespace SeoBoost.Models.ViewModels
         private int IncrementIndex()
         {
             return _index++;
+        }
+
+        private static PageData GetParent(PageData currentPage)
+        {
+            if (currentPage.ParentLink == PageReference.EmptyReference)
+                return null;
+
+            return _contentLoader.Service.Get<IContent>(currentPage.ParentLink) as PageData;
         }
     }
 }
