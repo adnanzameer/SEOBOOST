@@ -4,7 +4,7 @@
     <id>SeoBoost</id>
     <title>SeoBoost</title>
     <description>SEOBOOST for Episerver - Improves SEO ranking of the website with HtmlHelper methods for Internationalization i.e hreflang attributes (Alternate links), canonical tag (rel canonical), Breadcrumbs and editable robots.txt</description>
-    <releaseNotes>removed support simple url/ external url  in canonical tags and hreflang attributes. </releaseNotes>
+    <releaseNotes>Removed support for simple url/ external url in canonical tags and hreflang attributes.</releaseNotes>
     <version>1.6.0</version>
     <authors>Adnan Zameer</authors>
     <owners>Adnan Zameer</owners>
