@@ -45,10 +45,10 @@ Example:
                             <meta content="@item.Position" itemprop="position">
                         </li>
                     }
-                    else if (breadCrumbItem.PageData.HasTemplate() && !breadCrumbItem.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
+                    else if (item.PageData.HasTemplate() && !item.PageData.ContentLink.CompareToIgnoreWorkID(CURRENTPAGE.ContentLink))
                     {
                         <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                            <a href="@Url.ContentUrl(breadCrumbItem.PageData.ContentLink)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
+                            <a href="@Url.ContentUrl(item.PageData.ContentLink)" itemprop="item" itemscope itemtype="http://schema.org/Thing">
                                 <span itemprop="name">@item.PageData.PageName</span>
                             </a>
                             <meta content="@item.Position" itemprop="position">
@@ -60,7 +60,8 @@ Example:
                             <span itemprop="name">@item.PageData.PageName</span>
                             <meta content="@item.Position" itemprop="position">
                         </li>
-                    }                   
+                    }
+                    <span class="divider">/</span>
                 }
             }
         </ol> 
