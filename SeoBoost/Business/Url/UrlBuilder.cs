@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using EPiServer;
 using EPiServer.Core;
-using EPiServer.ServiceLocation;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
 
@@ -46,22 +44,14 @@ namespace SeoBoost.Business.Url
             return TransformUrl(url);
         }
 
-        public string GetExternalUrlHost()
+        public void AddMissingPathPart()
         {
-            var url = $"{GetScheme()}{GetHost()}";
-            return TransformUrl(url);
-        }
-
-        public UrlBuilder AddMissingPathPart()
-        {
-            if (HttpContext.Current == null)
-                return this;
+            if (HttpContext.Current == null) return;
 
             var currentUrl = GetScheme() + GetHost() + GetPath();
             var contextUrl = HttpContext.Current.Request.Url.AbsoluteUri;
 
-            if (!contextUrl.StartsWith(currentUrl))
-                return this;
+            if (!contextUrl.StartsWith(currentUrl)) return;
 
             var missingUrlPart = contextUrl.Remove(0, currentUrl.Length);
             var questionMarkPosition =
@@ -74,25 +64,22 @@ namespace SeoBoost.Business.Url
                 .ToList();
 
             _path.AddRange(missingPath);
-
-            return this;
         }
 
-        private UrlBuilder SetPath(string path)
+        private void SetPath(string path)
         {
             var pathParts = path.Split(PathSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .ToList();
 
-            return SetPath(pathParts);
+            SetPath(pathParts);
         }
 
-        private UrlBuilder SetPath(List<string> path)
+        private void SetPath(List<string> path)
         {
             _path = path;
-            return this;
         }
 
-        private UrlBuilder SetQuery(string query)
+        private void SetQuery(string query)
         {
             var parameters = query.Split(QueryParametersSeparator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
@@ -109,33 +96,16 @@ namespace SeoBoost.Business.Url
                 queryDictionary.Add(key, value);
             }
 
-            return SetQuery(queryDictionary);
+            SetQuery(queryDictionary);
         }
 
-        private UrlBuilder SetQuery(Dictionary<string, string> query)
+        private void SetQuery(Dictionary<string, string> query)
         {
             _query = query;
-            return this;
-        }
-
-        private UrlBuilder SetPathAndQuery(string pathAndQuery)
-        {
-            var splitPathAndQuery = pathAndQuery.Split(QueryPathSeparator[0]);
-
-            var path = splitPathAndQuery[0];
-            var query = splitPathAndQuery.Length > 1
-                ? splitPathAndQuery[1]
-                : string.Empty;
-
-            return SetPath(path)
-                .SetQuery(query);
         }
 
         private void ExtractFromContentReference(ContentReference contentReference, string culture = null)
         {
-            var repository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var pageData = repository.Get<IContent>(contentReference) as PageData;
-
             var url = !ContentReference.IsNullOrEmpty(contentReference)
                 ? UrlResolver.Current.GetUrl(contentReference, culture,
                     new VirtualPathArguments {ContextMode = ContextMode.Default})
@@ -144,9 +114,6 @@ namespace SeoBoost.Business.Url
                 _endWithSeparator = true;
 
             ExtractFromString(url);
-
-            if (!string.IsNullOrEmpty(pageData?.ExternalURL))
-                SetPathAndQuery(pageData.ExternalURL);
         }
 
         private void ExtractFromString(string url)
@@ -226,7 +193,7 @@ namespace SeoBoost.Business.Url
             return query.Remove(query.Length - 1);
         }
 
-        private string TransformUrl(string url)
+        private static string TransformUrl(string url)
         {
             return url != string.Empty
                 ? url.ToLower()
