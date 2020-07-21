@@ -152,11 +152,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\DependencyResolver\DependencyResolver.cs" />
+    <Compile Include="Business\Initialization\CustomizedRenderingInitialization.cs" />
+    <Compile Include="Business\Initialization\InitializationModule.cs" />
+    <Compile Include="Business\Initialization\PublishEventInitializationModule.cs" />
     <Compile Include="Business\Url\IUrlService.cs" />
     <Compile Include="Business\Url\UrlBuilder.cs" />
     <Compile Include="Business\Url\UrlService.cs" />
+    <Compile Include="Controllers\SBRobotsTxtController.cs" />
     <Compile Include="Helper\SeoHelper.cs" />
     <Compile Include="Models\AlternativePageLink.cs" />
+    <Compile Include="Models\Pages\SBRobotsTxt.cs" />
     <Compile Include="Models\ViewModels\BreadcrumbItemListElementViewModel.cs" />
     <Compile Include="Models\ViewModels\BreadcrumbsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -174,9 +179,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Business\Extension\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
@@ -38,7 +40,7 @@ namespace SeoBoost.Helper
             var masterLanguage = languages.FirstOrDefault(l => l.ID == 1) ?? languages.FirstOrDefault();
 
             var xDefault =
-                alternates.FirstOrDefault(a => string.Equals(a.Culture.ToLower(), masterLanguage.LanguageID.ToLower()));
+                alternates.FirstOrDefault(a => string.Equals(a.Culture.ToLower(), masterLanguage?.LanguageID.ToLower()));
 
             var siteLanguageList = languages.Select(language => language.LanguageID).ToList();
 
@@ -53,9 +55,9 @@ namespace SeoBoost.Helper
                 {
                     var fallbackLanguages =
                         ContentLanguageSettingsHandler.Instance.GetFallbackLanguages(contentReference, language);
-                    if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage.LanguageID))
+                    if (fallbackLanguages.Any() && fallbackLanguages.Contains(masterLanguage?.LanguageID))
                     {
-                        var url = xDefault.Url.Replace("/" + masterLanguage.LanguageID.ToLower() + "/",
+                        var url = xDefault.Url.Replace("/" + masterLanguage?.LanguageID.ToLower() + "/",
                             "/" + language + "/");
                         var alternate = new AlternativePageLink(url, language);
                         alternates.Add(alternate);
@@ -112,7 +114,7 @@ namespace SeoBoost.Helper
 
         public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this PageData pageData, ContentReference startPageReference = null)
         {
-            if(IsBlockContext)
+            if (IsBlockContext)
                 return new List<BreadcrumbItemListElementViewModel>();
 
             if (pageData == null)
@@ -199,12 +201,49 @@ namespace SeoBoost.Helper
             get
             {
                 var contentRouteHelper = ServiceLocator.Current.GetInstance<IContentRouteHelper>();
-                var content = contentRouteHelper.Content as BlockData;
-                if (content != null)
-                    return true;
-
-                return false;
+                return contentRouteHelper.Content is BlockData;
             }
+        }
+
+        internal static async Task AddRoute()
+        {
+           await RemoveRoute();
+
+            var route = RouteTable.Routes.MapRoute(
+                "RobotsTxtRoute",
+                "robots.txt",
+                new { controller = "SBRobotsTxt", action = "Index" });
+
+            RouteTable.Routes.Remove(route);
+            RouteTable.Routes.Insert(0, route);
+        }
+
+        internal static async Task RemoveRoute()
+        {
+            await Task.Run(() =>
+            {
+                var index = RouteIndex();
+                while (index != -1)
+                {
+                    RouteTable.Routes.RemoveAt(index);
+                    index = RouteIndex();
+                }
+            });
+        }
+
+        private static int RouteIndex()
+        {
+            for (var i = 0; i < RouteTable.Routes.Count; i++)
+            {
+                var routeBaseItem = RouteTable.Routes[i];
+                if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
+                {
+                    return i;
+                }
+
+            }
+
+            return -1;
         }
     }
 }

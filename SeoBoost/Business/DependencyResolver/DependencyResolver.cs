@@ -6,7 +6,7 @@ using SeoBoost.Business.Url;
 namespace SeoBoost.Business.DependencyResolver
 {
     [InitializableModule]
-    public class DependencyResolver : IConfigurableModule
+    internal class DependencyResolver : IConfigurableModule
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
