@@ -104,5 +104,9 @@ There are three methods available to get external URL for the content
        string GetExternalFriendlyUrl(ContentReference contentReference);
 
 ## Changelog
+### Changes in version 1.6.0
+1. Removed support for simple url/ external url in canonical tags and hreflang attributes.
+2. General code improvements
+
 ### Changes in version 1.5.0
 1. Added functionality to support editable robots.txt in CMS 
