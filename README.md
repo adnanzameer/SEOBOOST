@@ -104,6 +104,9 @@ There are three methods available to get external URL for the content
        string GetExternalFriendlyUrl(ContentReference contentReference);
 
 ## Changelog
+### Changes in version 1.6.5
+1. Exception handling in initialization module for empty database project.
+
 ### Changes in version 1.6.0
 1. Removed support for simple url/ external url in canonical tags and hreflang attributes.
 2. General code improvements
