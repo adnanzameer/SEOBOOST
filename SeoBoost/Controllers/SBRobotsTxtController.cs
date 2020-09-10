@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using EPiServer;
@@ -11,22 +12,21 @@ namespace SeoBoost.Controllers
 {
     public class SBRobotsTxtController : Controller
     {
-        [ContentOutputCache]
         public ActionResult Index()
         {
             var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
             var items = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
 
-            var content = "User-agent: *";
+            var content = "User-agent: *" + Environment.NewLine + "Disallow: /episerver";
             if (items != null)
             {
                 var robotTxtPages = items.ToList();
 
                 if (robotTxtPages.Any())
-                    content = robotTxtPages.First().RobotsTxtContent;
+                    content = robotTxtPages.First().RobotsContent;
             }
 
-            return Content(content, "text/plain", Encoding.UTF8);
+            return (ActionResult) this.Content(content, "text/plain", Encoding.UTF8);
         }
 
     }

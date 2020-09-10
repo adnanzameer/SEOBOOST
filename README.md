@@ -70,23 +70,16 @@ Example:
 
 The idea behind this feature is simple, provide editors with the flexibility to change robots.txt file on the go. 
 
-The Robots.txt page (backed by SBRobotsTxt PageType) will automatically be created for the site under Start Page. 
+The Robots.txt page (backed by SBRobotsTxt PageType) should be created by the editor for the site under Start Page. 
 
 ![robots.txt PageType](assets/docsimages/image001.png)
 
 The physical rebots.txt file content (if any) will be replaced with the CMS robobts.txt page content. The fallback behaviour of /robots.txt URL is the content of physical rebots.txt file (if any) otherwise the default 404 error page will be shown.
 
-**IMPORTANT**: If there is a physical robot.txt exist in the site root, always purged the CDN cache after the deploy or site restart. It is a recommendation to delete physical robots.txt file from the site root to ensure editable robot.txt content loads without a problem.
-
-
-There are restrictions in place to move (change parent) or delete the Rebots.txt page. 
-
-![robots.txt restrictions](assets/docsimages/image003.png)
-
-#### How to enable robots.txt feature
-The editable robot.txt feature is disabled by default and can be enabled by setting "Disable Robots.txt feature" property to "true" in the Robotx.Txt page. 
-
-![Robots.txt Page properties](assets/docsimages/image002.png)
+**IMPORTANT**: 
+* If there is a physical robot.txt exist in the site root, always purged the CDN cache after the deploy or site restart. It is a recommendation to delete physical robots.txt file from the site root to ensure editable robot.txt content loads without a problem.
+* If you are using IIS URL Rewrite rules to add a trailing slash at the end of the URL, add the following in the rule to ignore robots.txt route 
+       <add input="{URL}" pattern="\robots.txt" negate="true" />
 
 ### Additional helper methods
 

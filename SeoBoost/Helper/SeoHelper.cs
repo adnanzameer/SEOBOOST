@@ -212,7 +212,7 @@ namespace SeoBoost.Helper
             var route = RouteTable.Routes.MapRoute(
                 "RobotsTxtRoute",
                 "robots.txt",
-                new { controller = "SBRobotsTxt", action = "Index" });
+                (object)new { controller = "SBRobotsTxt", action = "Index" });
 
             RouteTable.Routes.Remove(route);
             RouteTable.Routes.Insert(0, route);
