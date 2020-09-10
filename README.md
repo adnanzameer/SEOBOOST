@@ -79,7 +79,8 @@ The physical rebots.txt file content (if any) will be replaced with the CMS robo
 **IMPORTANT**: 
 * If there is a physical robot.txt exist in the site root, always purged the CDN cache after the deploy or site restart. It is a recommendation to delete physical robots.txt file from the site root to ensure editable robot.txt content loads without a problem.
 * If you are using IIS URL Rewrite rules to add a trailing slash at the end of the URL, add the following in the rule to ignore robots.txt route 
-       <add input="{URL}" pattern="\robots.txt" negate="true" />
+    
+        <add input="{URL}" pattern="\robots.txt" negate="true" />
 
 ### Additional helper methods
 
