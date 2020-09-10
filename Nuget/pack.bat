@@ -10,6 +10,7 @@ md Package\tools\
 @Echo Copying new files
 copy ..\SeoBoost\bin\Release\SeoBoost.dll Package\lib\net45\
 copy ..\SeoBoost\bin\Release\SeoBoost.dll Package\lib\net461\
+copy ..\readme.txt Package\
 
 @Echo Packing files
 "..\.nuget\nuget.exe" pack Package\SeoBoost.nuspec

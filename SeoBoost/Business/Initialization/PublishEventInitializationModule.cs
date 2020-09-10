@@ -17,6 +17,7 @@ namespace SeoBoost.Business.Initialization
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.PublishingContent += Instance_PublishingPage;
             contentEvents.MovingContent += ContentEvents_MovingContent;
+            contentEvents.DeletingContent += ContentEvents_DeletingContent;
         }
 
         public void Uninitialize(InitializationEngine context)
@@ -30,14 +31,7 @@ namespace SeoBoost.Business.Initialization
         {
             if (e.Content is SBRobotsTxt content)
             {
-                if (content.DisableFeature)
-                {
-                    Task.Run(async () => await SeoHelper.RemoveRoute());
-                }
-                else
-                {
-                    Task.Run(async () => await SeoHelper.AddRoute());
-                }
+                Task.Run(async () => await SeoHelper.AddRoute());
             }
         }
 
@@ -45,16 +39,22 @@ namespace SeoBoost.Business.Initialization
         {
             if (e.Content is SBRobotsTxt)
             {
-                if (e.TargetLink.ID != ContentReference.StartPage.ID)
+                if (e.TargetLink.ID != ContentReference.WasteBasket.ID)
                 {
-                    var action = e.TargetLink == ContentReference.WasteBasket ? "remove" : "move";
-                    e.CancelAction = true;
-                    e.CancelReason = $"You can't {action} the page. This page is a part of SEOBOOST package. Manage robot.txt settings trough the page properties.";
+                    Task.Run(async () => await SeoHelper.AddRoute());
                 }
                 else
                 {
                     Task.Run(async () => await SeoHelper.RemoveRoute());
                 }
+            }
+        }
+
+        private void ContentEvents_DeletingContent(object sender, ContentEventArgs e)
+        {
+            if (e.Content is SBRobotsTxt)
+            {
+                Task.Run(async () => await SeoHelper.RemoveRoute());
             }
         }
     }

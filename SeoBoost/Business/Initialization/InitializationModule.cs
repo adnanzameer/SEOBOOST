@@ -29,17 +29,7 @@ namespace SeoBoost.Business.Initialization
                     {
                         var list = content.ToList();
 
-                        if (!list.Any())
-                        {
-                            var robotsTxtPage = contentRepository.GetDefault<SBRobotsTxt>(ContentReference.StartPage);
-                            robotsTxtPage.PageName = "Robots.txt";
-                            robotsTxtPage.VisibleInMenu = false;
-                            robotsTxtPage.DisableFeature = true;
-                            robotsTxtPage.RobotsTxtContent = "User-agent: *";
-                            contentRepository.Save(robotsTxtPage, EPiServer.DataAccess.SaveAction.Publish,
-                                EPiServer.Security.AccessLevel.NoAccess);
-                        }
-                        else if (!list.First().DisableFeature)
+                        if (list.Any())
                         {
                             Task.Run(async () => await SeoHelper.AddRoute());
                         }
