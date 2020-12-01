@@ -4,18 +4,23 @@ using System.Text;
 using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
-using EPiServer.ServiceLocation;
-using EPiServer.Web.Mvc;
 using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Controllers
 {
     public class SBRobotsTxtController : Controller
     {
+        private readonly IContentLoader _contentLoader;
+
+        public SBRobotsTxtController(IContentLoader contentLoader)
+        {
+            _contentLoader = contentLoader;
+        }
+
         public ActionResult Index()
         {
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var items = contentRepository.GetChildren<SBRobotsTxt>(ContentReference.StartPage);
+            var items = _contentLoader
+                .GetChildren<SBRobotsTxt>(ContentReference.StartPage, new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
 
             var content = "User-agent: *" + Environment.NewLine + "Disallow: /episerver";
             if (items != null)
