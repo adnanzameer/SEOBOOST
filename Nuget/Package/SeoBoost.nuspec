@@ -4,8 +4,8 @@
     <id>SeoBoost</id>
     <title>SeoBoost</title>
     <description>SEOBOOST for Episerver - Improves SEO ranking of the website with HtmlHelper methods for Internationalization i.e hreflang attributes (Alternate links), canonical tag (rel canonical), Breadcrumbs and editable robots.txt</description>
-    <releaseNotes>Option to create robots.txt page by the editor. Removed option to automatically create  robots.txt page on website initialization.</releaseNotes>
-    <version>1.6.7</version>
+    <releaseNotes>Robots.txt: Injecting the dependency and changing from the ContentRepository to ContentLoader.</releaseNotes>
+    <version>1.6.8</version>
     <authors>Adnan Zameer</authors>
     <owners>Adnan Zameer</owners>
     <licenseUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/LICENSE.md</licenseUrl>
