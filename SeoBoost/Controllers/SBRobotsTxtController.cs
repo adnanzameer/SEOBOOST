@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using System.Web.Mvc;
 using EPiServer;
 using EPiServer.Core;
+using Microsoft.AspNetCore.Mvc;
 using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Controllers

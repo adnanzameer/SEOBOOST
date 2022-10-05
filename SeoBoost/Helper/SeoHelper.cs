@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using System.Web.Routing;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Editor;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using SeoBoost.Business.Url;
 using SeoBoost.Models;
 using SeoBoost.Models.ViewModels;
@@ -19,18 +19,18 @@ namespace SeoBoost.Helper
 {
     public static class SeoHelper
     {
-        public static MvcHtmlString GetAlternateLinks(this HtmlHelper html)
+        public static HtmlString GetAlternateLinks(this IHtmlHelper html)
         {
-            var requestContext = html.ViewContext.RequestContext;
+            var requestContext = html.ViewContext.HttpContext;
             var contentReference = requestContext.GetContentLink();
 
             return GetAlternateLinks(contentReference);
         }
 
-        public static MvcHtmlString GetAlternateLinks(this ContentReference contentReference)
+        public static HtmlString GetAlternateLinks(this ContentReference contentReference)
         {
             if (!ProcessRequest)
-                return MvcHtmlString.Create("");
+                return new HtmlString("");
 
             var alternates = new List<AlternativePageLink>();
             var languages = ServiceLocator.Current.GetInstance<ILanguageBranchRepository>().ListEnabled();
@@ -74,31 +74,31 @@ namespace SeoBoost.Helper
             return htmlString;
         }
 
-        public static MvcHtmlString GetAlternateLinks(this PageData pageData)
+        public static HtmlString GetAlternateLinks(this PageData pageData)
         {
             return GetAlternateLinks(pageData.ContentLink);
         }
 
-        public static MvcHtmlString GetCanonicalLink(this HtmlHelper html)
+        public static HtmlString GetCanonicalLink(this IHtmlHelper html)
         {
-            var requestContext = html.ViewContext.RequestContext;
+            var requestContext = html.ViewContext.HttpContext;
             var contentReference = requestContext.GetContentLink();
             return GetCanonicalLink(contentReference);
         }
 
-        public static MvcHtmlString GetCanonicalLink(this ContentReference contentReference)
+        public static HtmlString GetCanonicalLink(this ContentReference contentReference)
         {
             if (!ProcessRequest)
-                return MvcHtmlString.Create("");
+                return new HtmlString("");
 
             var sb = new StringBuilder();
             var urlService = ServiceLocator.Current.GetInstance<IUrlService>();
             sb.AppendLine("<link rel=\"canonical\" href=\"" + urlService.GetExternalFriendlyUrl(contentReference) +
                           "\" />");
-            return MvcHtmlString.Create(sb.ToString());
+            return new HtmlString(sb.ToString());
         }
 
-        public static MvcHtmlString GetCanonicalLink(this PageData pageData)
+        public static HtmlString GetCanonicalLink(this PageData pageData)
         {
             return GetCanonicalLink(pageData.ContentLink);
         }
@@ -128,9 +128,9 @@ namespace SeoBoost.Helper
             return breadcrumbModel.BreadcrumbItemList;
         }
 
-        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this HtmlHelper html, ContentReference startPageReference = null)
+        public static List<BreadcrumbItemListElementViewModel> GetBreadcrumbItemList(this IHtmlHelper html, ContentReference startPageReference = null)
         {
-            var requestContext = html.ViewContext.RequestContext;
+            var requestContext = html.ViewContext.HttpContext;
             var contentReference = requestContext.GetContentLink();
 
             return GetBreadcrumbItemList(contentReference, startPageReference);
@@ -166,7 +166,7 @@ namespace SeoBoost.Helper
                 }
         }
 
-        private static MvcHtmlString CreateHtmlString(AlternativeLinkViewModel model)
+        private static HtmlString CreateHtmlString(AlternativeLinkViewModel model)
         {
             var sb = new StringBuilder();
 
@@ -177,7 +177,7 @@ namespace SeoBoost.Helper
             if (!string.IsNullOrEmpty(model.XDefaultUrl))
                 sb.AppendLine(" <link rel=\"alternate\" href=\"" + model.XDefaultUrl + "\" hreflang=\"x-default\" />");
 
-            return MvcHtmlString.Create(sb.ToString());
+            return new HtmlString(sb.ToString());
         }
 
         private static bool ProcessRequest

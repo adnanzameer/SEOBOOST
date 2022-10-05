@@ -1,6 +1,7 @@
 ﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
+using Microsoft.Extensions.DependencyInjection;
 using SeoBoost.Business.Url;
 
 namespace SeoBoost.Business.DependencyResolver
@@ -22,7 +23,7 @@ namespace SeoBoost.Business.DependencyResolver
         {
         }
 
-        private static void AddHybridServices(IServiceConfigurationProvider configurationProvider)
+        private static void AddHybridServices(IServiceCollection configurationProvider)
         {
             configurationProvider.AddHttpContextOrThreadScoped<IUrlService, UrlService>();
         }

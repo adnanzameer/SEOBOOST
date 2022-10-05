@@ -13,7 +13,7 @@ using SeoBoost.Models.Pages;
 namespace SeoBoost.Business.Initialization
 {
     [InitializableModule]
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    [ModuleDependency(typeof(InitializationModule))]
     internal class InitializationModule : IInitializableModule
     {
         public void Initialize(InitializationEngine context)

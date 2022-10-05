@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using EPiServer.Core;
 using EPiServer.Web;
-using EPiServer.Web.Routing;
 
 namespace SeoBoost.Business.Url
 {
@@ -46,10 +44,10 @@ namespace SeoBoost.Business.Url
 
         public void AddMissingPathPart()
         {
-            if (HttpContext.Current == null) return;
+            if (HttpContextHelper.Current == null) return;
 
             var currentUrl = GetScheme() + GetHost() + GetPath();
-            var contextUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+            var contextUrl = HttpContextHelper.Current.Request.Url.AbsoluteUri;
 
             if (!contextUrl.StartsWith(currentUrl)) return;
 

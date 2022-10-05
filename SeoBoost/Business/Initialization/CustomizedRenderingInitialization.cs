@@ -1,13 +1,11 @@
 ﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.Web;
-using EPiServer.Web.Mvc;
 using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Business.Initialization
 {
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    [ModuleDependency(typeof(InitializationModule))]
     internal class CustomizedRenderingInitialization : IInitializableModule
     {
         public void Initialize(InitializationEngine context)
