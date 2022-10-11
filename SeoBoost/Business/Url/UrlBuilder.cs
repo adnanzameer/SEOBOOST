@@ -13,7 +13,6 @@ namespace SeoBoost.Business.Url
 {
     public class UrlBuilder
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private const string Pattern = @"^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?";
         private const string SchemeSeparator = "://";
         private const string PathSeparator = "/";
