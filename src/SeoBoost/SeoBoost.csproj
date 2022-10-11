@@ -5,20 +5,21 @@
 	<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	<PackageId>SEOBOOST</PackageId>
 	<Title>SEOBOOST</Title>
+	<version>2.0.0</version>
 	<Authors>Adnan Zameer</Authors>
 	<Company>Adnan Zameer</Company>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/adnanzameer/SEOBOOST</PackageProjectUrl>
-	  <iconUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/boost.png</iconUrl>
+	<iconUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/boost.png</iconUrl>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	<Description>SEOBOOST for Optimizely - Improves SEO ranking of the website with HtmlHelper methods for Internationalization i.e hreflang attributes (Alternate links), canonical tag (rel canonical), Breadcrumbs and editable robots.txt</Description>
 	<PackageReleaseNotes>https://github.com/adnanzameer/SEOBOOST/blob/master/CHANGELOG.md</PackageReleaseNotes>
 	<PackageTags>seo hreflang alternate links canonical tag breadcrumbs robots.txt internationalization</PackageTags>
 	<RepositoryUrl>https://github.com/adnanzameer/SEOBOOST.git</RepositoryUrl>
 
-	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-	<ItemGroup>
+  <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
@@ -31,6 +32,6 @@
 	<None Include="msbuild\Main.proj" />
   </ItemGroup>
 
-	<Import Project="msbuild\Main.proj" />
+  <Import Project="msbuild\Main.proj" />
 
 </Project>
