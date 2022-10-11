@@ -31,7 +31,7 @@ namespace SeoBoost.Business.Initialization
 
                         if (list.Any())
                         {
-                            Task.Run(async () => await SeoHelper.AddRoute());
+                            //Task.Run(async () => await SeoHelper.AddRoute());
                         }
                     }
                 }

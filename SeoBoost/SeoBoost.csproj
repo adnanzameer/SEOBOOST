@@ -5,17 +5,11 @@
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EPiServer.CMS" Version="12.0.2" />
     <PackageReference Include="EPiServer.CMS.AspNetCore" Version="12.0.3" />
     <PackageReference Include="EPiServer.CMS.Core" Version="12.0.3" />
     <PackageReference Include="EPiServer.Framework" Version="12.0.3" />

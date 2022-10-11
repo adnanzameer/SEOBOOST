@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using EPiServer.Core;
+using EPiServer.ServiceLocation;
 using EPiServer.Web;
+using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Http;
 
 namespace SeoBoost.Business.Url
 {
-    internal class UrlBuilder
+    public class UrlBuilder
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private const string Pattern = @"^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?";
         private const string SchemeSeparator = "://";
         private const string PathSeparator = "/";
@@ -38,16 +42,30 @@ namespace SeoBoost.Business.Url
 
         public string GetExternalUrl()
         {
+
             var url = $"{GetScheme()}{GetHost()}{GetPath()}{GetQuery()}";
             return TransformUrl(url);
         }
 
+        public string GetAbsoluteUrl()
+        {
+            var httpContextAccessor = ServiceLocator.Current.GetInstance<IHttpContextAccessor>();
+
+            if (httpContextAccessor.HttpContext != null)
+            {
+                var request = httpContextAccessor.HttpContext.Request;
+
+                return $"{request.Scheme}://{request.Host}{request.PathBase}{request.Path}{request.QueryString}";
+            }
+
+            return "";
+        }
+
+
         public void AddMissingPathPart()
         {
-            if (HttpContextHelper.Current == null) return;
-
             var currentUrl = GetScheme() + GetHost() + GetPath();
-            var contextUrl = HttpContextHelper.Current.Request.Url.AbsoluteUri;
+            var contextUrl = GetAbsoluteUrl();
 
             if (!contextUrl.StartsWith(currentUrl)) return;
 
@@ -106,7 +124,7 @@ namespace SeoBoost.Business.Url
         {
             var url = !ContentReference.IsNullOrEmpty(contentReference)
                 ? UrlResolver.Current.GetUrl(contentReference, culture,
-                    new VirtualPathArguments {ContextMode = ContextMode.Default})
+                    new VirtualPathArguments { ContextMode = ContextMode.Default })
                 : string.Empty;
             if (!string.IsNullOrEmpty(url) && url.EndsWith("/"))
                 _endWithSeparator = true;
@@ -116,8 +134,7 @@ namespace SeoBoost.Business.Url
 
         private void ExtractFromString(string url)
         {
-            if (_regex == null)
-                _regex = new Regex(Pattern, RegexOptions.IgnoreCase);
+            _regex ??= new Regex(Pattern, RegexOptions.IgnoreCase);
 
             var match = url == null
                 ? _regex.Match(string.Empty)

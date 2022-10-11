@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
+using EPiServer.Editor;
 using EPiServer.ServiceLocation;
+using EPiServer.Web;
 using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using SeoBoost.Business.Url;
 using SeoBoost.Models;
 using SeoBoost.Models.ViewModels;
@@ -154,10 +157,10 @@ namespace SeoBoost.Helper
             foreach (var language in languages)
                 foreach (var p in pagesData)
                 {
-                    if (string.Equals(p.LanguageBranch.ToLower(), language.LanguageID.ToLower(),
+                    if (string.Equals(p.Language.Name.ToLower(), language.LanguageID.ToLower(),
                         StringComparison.Ordinal))
                     {
-                        var url = urlService.GetExternalFriendlyUrl(page.ContentLink, p.LanguageBranch);
+                        var url = urlService.GetExternalFriendlyUrl(page.ContentLink, p.Language.Name);
                         var alternate = new AlternativePageLink(url, language.LanguageID);
 
                         alternates.Add(alternate);
@@ -184,7 +187,7 @@ namespace SeoBoost.Helper
         {
             get
             {
-                bool process = !PageEditing.PageIsInEditMode;
+                var process = !IsInEditMode();
 
                 if (process)
                 {
@@ -196,6 +199,13 @@ namespace SeoBoost.Helper
             }
         }
 
+        private static bool IsInEditMode()
+        {
+            var contextModeResolver = ServiceLocator.Current.GetInstance<IContextModeResolver>();
+            var mode = contextModeResolver.CurrentMode;
+            return mode is ContextMode.Edit or ContextMode.Preview;
+        }
+
         private static bool IsBlockContext
         {
             get
@@ -205,45 +215,45 @@ namespace SeoBoost.Helper
             }
         }
 
-        internal static async Task AddRoute()
-        {
-           await RemoveRoute();
+        //internal static async Task AddRoute()
+        //{
+        //   await RemoveRoute();
 
-            var route = RouteTable.Routes.MapRoute(
-                "RobotsTxtRoute",
-                "robots.txt",
-                (object)new { controller = "SBRobotsTxt", action = "Index" });
+        //    var route = RouteTable.Routes.MapRoute(
+        //        "RobotsTxtRoute",
+        //        "robots.txt",
+        //        (object)new { controller = "SBRobotsTxt", action = "Index" });
 
-            RouteTable.Routes.Remove(route);
-            RouteTable.Routes.Insert(0, route);
-        }
+        //    RouteTable.Routes.Remove(route);
+        //    RouteTable.Routes.Insert(0, route);
+        //}
 
-        internal static async Task RemoveRoute()
-        {
-            await Task.Run(() =>
-            {
-                var index = RouteIndex();
-                while (index != -1)
-                {
-                    RouteTable.Routes.RemoveAt(index);
-                    index = RouteIndex();
-                }
-            });
-        }
+        //internal static async Task RemoveRoute()
+        //{
+        //    await Task.Run(() =>
+        //    {
+        //        var index = RouteIndex();
+        //        while (index != -1)
+        //        {
+        //            RouteTable.Routes.RemoveAt(index);
+        //            index = RouteIndex();
+        //        }
+        //    });
+        //}
 
-        private static int RouteIndex()
-        {
-            for (var i = 0; i < RouteTable.Routes.Count; i++)
-            {
-                var routeBaseItem = RouteTable.Routes[i];
-                if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
-                {
-                    return i;
-                }
+        //private static int RouteIndex()
+        //{
+        //    for (var i = 0; i < RouteTable.Routes.Count; i++)
+        //    {
+        //        var routeBaseItem = RouteTable.Routes[i];
+        //        if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
+        //        {
+        //            return i;
+        //        }
 
-            }
+        //    }
 
-            return -1;
-        }
+        //    return -1;
+        //}
     }
 }
