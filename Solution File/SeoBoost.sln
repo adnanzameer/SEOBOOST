@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeoBoost", "..\SeoBoost\SeoBoost.csproj", "{5AC7CC0A-0CC5-42F3-A634-A8E7D57E5B43}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{5B804CA7-2697-4941-AE1F-A788A97124A0}"
-	ProjectSection(SolutionItems) = preProject
-		..\Nuget\pack.bat = ..\Nuget\pack.bat
-		..\Nuget\Package\SeoBoost.nuspec = ..\Nuget\Package\SeoBoost.nuspec
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeoBoost", "..\SeoBoost\SeoBoost.csproj", "{5AC7CC0A-0CC5-42F3-A634-A8E7D57E5B43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0F52F24-F330-4D7A-874A-F67C66DB1368}
 	EndGlobalSection
 EndGlobal
