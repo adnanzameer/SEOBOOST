@@ -1,38 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-  
-      <TargetFramework>net5.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <PackageId>Geta.Optimizely.Tags</PackageId>
-    <Title>Geta Optimizely Tags</Title>
-    <Authors>Geta Digital</Authors>
-    <Company>Geta Digital</Company>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Geta/geta-optimizely-tags</PackageProjectUrl>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageIconUrl>https://cdn.geta.no/opensource/icons/geta-sitemaps-icon.png</PackageIconUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>Easily add tags to your EPiServer content and use the powerful query engine to get back what you want.</Description>
-    <PackageReleaseNotes>https://github.com/Geta/geta-optimizely-tags/blob/master/CHANGELOG.md</PackageReleaseNotes>
-    <PackageTags>Tags Optimizely Geta</PackageTags>
-    <RepositoryUrl>https://github.com/Geta/geta-optimizely-tags.git</RepositoryUrl>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="module\**" />
-    <EmbeddedResource Remove="module\**" />
-    <None Remove="module\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.tinymce\3.0.1\contentFiles\any\any\modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.ui.admin\12.0.2\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.Admin\EPiServer.Cms.UI.Admin.zip" />
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.ui.settings\12.0.2\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.Settings\EPiServer.Cms.UI.Settings.zip" />
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.ui.visitorgroups\12.0.2\contentFiles\any\any\modules\_protected\EPiServer.Cms.UI.VisitorGroups\EPiServer.Cms.UI.VisitorGroups.zip" />
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.ui\12.0.2\contentFiles\any\any\modules\_protected\CMS\CMS.zip" />
-    <None Remove="C:\Users\adza\.nuget\packages\episerver.cms.ui\12.0.2\contentFiles\any\any\modules\_protected\Shell\Shell.zip" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<TargetFramework>net5.0</TargetFramework>
+	<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	<PackageId>SEOBOOST</PackageId>
+	<Title>SEOBOOST</Title>
+	<Authors>Adnan Zameer</Authors>
+	<Company>Adnan Zameer</Company>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageProjectUrl>https://github.com/adnanzameer/SEOBOOST</PackageProjectUrl>
+	  <iconUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/boost.png</iconUrl>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	<Description>SEOBOOST for Optimizely - Improves SEO ranking of the website with HtmlHelper methods for Internationalization i.e hreflang attributes (Alternate links), canonical tag (rel canonical), Breadcrumbs and editable robots.txt</Description>
+	<PackageReleaseNotes>https://github.com/adnanzameer/SEOBOOST/blob/master/CHANGELOG.md</PackageReleaseNotes>
+	<PackageTags>seo hreflang alternate links canonical tag breadcrumbs robots.txt internationalization</PackageTags>
+	<RepositoryUrl>https://github.com/adnanzameer/SEOBOOST.git</RepositoryUrl>
+  </PropertyGroup>
+	<ItemGroup>
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="msbuild\Main.proj" />
+	<None Include="msbuild\Main.proj" />
   </ItemGroup>
 
+	<Import Project="msbuild\Main.proj" />
 
-  <Import Project="msbuild\Main.proj" />
-  
 </Project>

@@ -19,10 +19,6 @@ namespace SeoBoost.Business.Initialization
         {
             context.Locate.Advanced.GetInstance<ITemplateResolverEvents>().TemplateResolved -= TemplateCoordinator.OnTemplateResolved;
         }
-
-        public void Preload(string[] parameters)
-        {
-        }
     }
 
     [ServiceConfiguration(typeof(IViewTemplateModelRegistrator))]
@@ -40,6 +36,5 @@ namespace SeoBoost.Business.Initialization
         {
 
         }
-
     }
 }
