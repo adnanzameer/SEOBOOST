@@ -1,22 +1,44 @@
-[![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
+# SEOBOOST for Optimizely
 
-# SEOBOOST for EPiServer
+[![Platform](https://img.shields.io/badge/Platform-.NET%205.0-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
+[![Platform](https://img.shields.io/badge/EPiServer-%2012-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
 ## Description
 This package facilitates developers and editors to improve the SEO ranking of the website by utilizing helper methods & features provided.
 
 ## Features
 The package provides the following helper methods & features:
+* robots.txt
 * Canonical Link 
 * Alternate Links (hreflang attributes)
 * Breadcrumbs items
-* robots.txt
 
 ## How to install
-Install NuGet package from Episerver NuGet Feed:
+Install NuGet package from Optimizely NuGet Feed:
 
-    Install-Package SeoBoost
+Start by installing NuGet package (use [Optimizely NuGet](https://nuget.optimizely.com/)):
 
+```
+dotnet add package SeoBoost
+```
+
+or using package manager console
+
+```
+ Install-Package SeoBoost
+```
+Register SEOBOOST in Startup.cs using folllowing service extension 
+
+```csharp
+services.AddSeoBoost();
+```
+
+Then, call `UseSeoBoost` in the `Configure` method:
+
+```csharp
+app.UseSeoBoost();
+```
+   
 ## How to use
 
 Include the follow **@ using SeoBoost.Helper** at top of the Mater page.

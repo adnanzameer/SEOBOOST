@@ -27,7 +27,7 @@ namespace SeoBoost.Business.Events
         {
             if (e.Content is SBRobotsTxt && e.Content.ParentLink.ID != ContentReference.StartPage.ID)
             {
-                e.CancelReason = " robots.txt can only be published under site start page";
+                e.CancelReason = "robots.txt page can only be published under site start page";
                 e.CancelAction = true;
             }
         }
@@ -49,7 +49,7 @@ namespace SeoBoost.Business.Events
                 if (robotTxtPages.Any())
                 {
                     var parent = _contentLoader.Get<PageData>(robotTxtPages.First().ParentLink);
-                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID +
+                    e.CancelReason = "robots.txt page already exist under " + parent.Name + " (" + parent.ContentLink.ID +
                                      ")";
                     e.CancelAction = true;
                 }
@@ -57,7 +57,7 @@ namespace SeoBoost.Business.Events
                 return;
             }
 
-            e.CancelReason = " robots.txt can only be moved under site start  page";
+            e.CancelReason = "robots.txt page can only be moved under site start page";
             e.CancelAction = true;
         }
 
@@ -75,7 +75,7 @@ namespace SeoBoost.Business.Events
                 if (robotTxtPages.Any())
                 {
                     var parent = _contentLoader.Get<PageData>(robotTxtPages.First().ParentLink);
-                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID +
+                    e.CancelReason = "robots.txt page already exist under " + parent.Name + " (" + parent.ContentLink.ID +
                                      ")";
                     e.CancelAction = true;
                 }
@@ -83,7 +83,7 @@ namespace SeoBoost.Business.Events
                 return;
             }
 
-            e.CancelReason = " robots.txt can only be created under site start page";
+            e.CancelReason = "robots.txt page can only be created under site start page";
             e.CancelAction = true;
         }
     }
