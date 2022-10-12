@@ -215,46 +215,5 @@ namespace SeoBoost.Helper
                 return contentRouteHelper.Content is BlockData;
             }
         }
-
-        //internal static async Task AddRoute()
-        //{
-        //   await RemoveRoute();
-
-        //    var route = RouteTable.Routes.MapRoute(
-        //        "RobotsTxtRoute",
-        //        "robots.txt",
-        //        (object)new { controller = "SBRobotsTxt", action = "Index" });
-
-        //    RouteTable.Routes.Remove(route);
-        //    RouteTable.Routes.Insert(0, route);
-        //}
-
-        //internal static async Task RemoveRoute()
-        //{
-        //    await Task.Run(() =>
-        //    {
-        //        var index = RouteIndex();
-        //        while (index != -1)
-        //        {
-        //            RouteTable.Routes.RemoveAt(index);
-        //            index = RouteIndex();
-        //        }
-        //    });
-        //}
-
-        //private static int RouteIndex()
-        //{
-        //    for (var i = 0; i < RouteTable.Routes.Count; i++)
-        //    {
-        //        var routeBaseItem = RouteTable.Routes[i];
-        //        if (routeBaseItem is Route routeData && routeData.Url.Contains("robots.txt"))
-        //        {
-        //            return i;
-        //        }
-
-        //    }
-
-        //    return -1;
-        //}
     }
 }

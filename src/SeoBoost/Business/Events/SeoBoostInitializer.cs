@@ -25,7 +25,7 @@ namespace SeoBoost.Business.Events
 
         private void Instance_PublishingPage(object sender, ContentEventArgs e)
         {
-            if (e.Content is SBRobotsTxt && e.TargetLink.ID != ContentReference.StartPage.ID)
+            if (e.Content is SBRobotsTxt && e.Content.ParentLink.ID != ContentReference.StartPage.ID)
             {
                 e.CancelReason = " robots.txt can only be published under site start page";
                 e.CancelAction = true;
@@ -40,23 +40,25 @@ namespace SeoBoost.Business.Events
             if (e.TargetLink.ID == ContentReference.WasteBasket.ID)
                 return;
 
-            if (e.TargetLink.ID != ContentReference.StartPage.ID)
+            if (e.TargetLink.ID == ContentReference.StartPage.ID)
             {
-                e.CancelReason = " robots.txt can only be moved under site start  page";
-                e.CancelAction = true;
-            }
-            else
-            {
-                var items = _contentLoader.GetChildren<SBRobotsTxt>(ContentReference.StartPage, new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
+                var items = _contentLoader.GetChildren<SBRobotsTxt>(ContentReference.StartPage,
+                    new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
 
                 var robotTxtPages = items.ToList();
                 if (robotTxtPages.Any())
                 {
                     var parent = _contentLoader.Get<PageData>(robotTxtPages.First().ParentLink);
-                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID + ")";
+                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID +
+                                     ")";
                     e.CancelAction = true;
                 }
+
+                return;
             }
+
+            e.CancelReason = " robots.txt can only be moved under site start  page";
+            e.CancelAction = true;
         }
 
         private void ContentEvents_CreatingContent(object sender, ContentEventArgs e)
@@ -64,23 +66,25 @@ namespace SeoBoost.Business.Events
             if (e.Content is not SBRobotsTxt)
                 return;
 
-            if (e.TargetLink.ID != ContentReference.StartPage.ID)
+            if (e.Content.ParentLink.ID == ContentReference.StartPage.ID)
             {
-                e.CancelReason = " robots.txt can only be created under site start page";
-                e.CancelAction = true;
-            }
-            else
-            {
-                var items = _contentLoader.GetChildren<SBRobotsTxt>(ContentReference.StartPage, new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
+                var items = _contentLoader.GetChildren<SBRobotsTxt>(ContentReference.StartPage,
+                    new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
 
                 var robotTxtPages = items.ToList();
                 if (robotTxtPages.Any())
                 {
                     var parent = _contentLoader.Get<PageData>(robotTxtPages.First().ParentLink);
-                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID + ")";
+                    e.CancelReason = " robots.txt already exist under " + parent.Name + " (" + parent.ContentLink.ID +
+                                     ")";
                     e.CancelAction = true;
                 }
+
+                return;
             }
+
+            e.CancelReason = " robots.txt can only be created under site start page";
+            e.CancelAction = true;
         }
     }
 }
