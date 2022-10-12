@@ -3,12 +3,13 @@ using System.Linq;
 using System.Text;
 using EPiServer;
 using EPiServer.Core;
+using EPiServer.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Controllers
 {
-    public class SBRobotsTxtController : Controller
+    public class SBRobotsTxtController : PageController<SBRobotsTxt>
     {
         private readonly IContentLoader _contentLoader;
 
@@ -17,7 +18,8 @@ namespace SeoBoost.Controllers
             _contentLoader = contentLoader;
         }
 
-        public ActionResult Index()
+        [Route("robots.txt")]
+        public IActionResult Index()
         {
             var items = _contentLoader
                 .GetChildren<SBRobotsTxt>(ContentReference.StartPage, new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
@@ -31,7 +33,7 @@ namespace SeoBoost.Controllers
                     content = robotTxtPages.First().RobotsContent;
             }
 
-            return (ActionResult) this.Content(content, "text/plain", Encoding.UTF8);
+            return Content(content, "text/plain", Encoding.UTF8);
         }
 
     }

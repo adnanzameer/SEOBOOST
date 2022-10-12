@@ -151,6 +151,7 @@ namespace SeoBoost.Helper
 
 
             foreach (var language in languages)
+            {
                 foreach (var p in pagesData)
                 {
                     if (string.Equals(p.Language.Name.ToLower(), language.LanguageID.ToLower(),
@@ -163,6 +164,7 @@ namespace SeoBoost.Helper
                         break;
                     }
                 }
+            }
         }
 
         private static HtmlString CreateHtmlString(AlternativeLinkViewModel model)
@@ -170,11 +172,14 @@ namespace SeoBoost.Helper
             var sb = new StringBuilder();
 
             foreach (var alternate in model.Alternates)
-                sb.AppendLine("<link rel=\"alternate\" href=\"" + alternate.Url + "\" hreflang=\"" + alternate.Culture.ToLower() +
-                              "\" />");
+            {
+                sb.AppendLine("<link rel=\"alternate\" href=\"" + alternate.Url + "\" hreflang=\"" + alternate.Culture.ToLower() + "\" />");
+            }
 
             if (!string.IsNullOrEmpty(model.XDefaultUrl))
+            {
                 sb.AppendLine(" <link rel=\"alternate\" href=\"" + model.XDefaultUrl + "\" hreflang=\"x-default\" />");
+            }
 
             return new HtmlString(sb.ToString());
         }
