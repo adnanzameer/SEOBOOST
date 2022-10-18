@@ -3,13 +3,14 @@
 
 	<TargetFramework>net5.0</TargetFramework>
 	<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	<PackageId>SEOBOOST</PackageId>
-	<Title>SEOBOOST</Title>
-	<version>2.0.0</version>
+	<PackageId>SeoBoost</PackageId>
+	<Title>SeoBoost</Title>
+	<version>2.0.1</version>
 	<Authors>Adnan Zameer</Authors>
 	<Company>Adnan Zameer</Company>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/adnanzameer/SEOBOOST</PackageProjectUrl>
+	<PackageIcon>icon.png</PackageIcon>
 	<iconUrl>https://raw.githubusercontent.com/adnanzameer/SEOBOOST/master/boost.png</iconUrl>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	<Description>SEOBOOST for Optimizely - Improves SEO ranking of the website with HtmlHelper methods for Internationalization i.e hreflang attributes (Alternate links), canonical tag (rel canonical), Breadcrumbs and editable robots.txt</Description>
@@ -31,6 +32,14 @@
   <ItemGroup>
 	<None Include="msbuild\Main.proj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\images\icon.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+			<Link>icon.png</Link>
+		</None>
+	</ItemGroup>
 
   <Import Project="msbuild\Main.proj" />
 
