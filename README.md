@@ -41,7 +41,7 @@ app.UseSeoBoost();
 [![Platform](https://img.shields.io/badge/Platform-.NET%204.6.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
 [![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
-### .NET Framework (4.6.1)
+### .NET Framework (4.7.1)
 
 Install NuGet package from Optimizely NuGet Feed:
 
@@ -51,7 +51,7 @@ Install NuGet package from Optimizely NuGet Feed:
 	
 ## How to use
 
-Include the follow **@ using SeoBoost.Helper** at top of the Mater page.
+Include the follow **@using SeoBoost.Helper** at top of the Mater page.
      
 ### Canonical link
 Use the following extension **@Html.GetCanonicalLink()** within **<head></head>** section.
