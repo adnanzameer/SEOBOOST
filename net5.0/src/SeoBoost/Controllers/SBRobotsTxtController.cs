@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.Web.Mvc;
@@ -18,22 +16,14 @@ namespace SeoBoost.Controllers
             _contentLoader = contentLoader;
         }
 
-        [Route("robots.txt")]
-        public IActionResult Index()
+        [HttpGet]
+        [Route("robots.txt", Name = "robots.txt")]
+        public IActionResult Index(SBRobotsTxt currentPage)
         {
             var items = _contentLoader
                 .GetChildren<SBRobotsTxt>(ContentReference.StartPage, new LoaderOptions { LanguageLoaderOption.FallbackWithMaster() });
 
-            var content = "User-agent: *" + Environment.NewLine + "Disallow: /episerver";
-            if (items != null)
-            {
-                var robotTxtPages = items.ToList();
-
-                if (robotTxtPages.Any())
-                    content = robotTxtPages.First().RobotsContent;
-            }
-
-            return Content(content, "text/plain", Encoding.UTF8);
+            return Content(currentPage.RobotsContent, "text/plain", Encoding.UTF8);
         }
 
     }

@@ -7,6 +7,7 @@ using SeoBoost.Models.Pages;
 
 namespace SeoBoost.Business.Initialization
 {
+    [InitializableModule]
     [ModuleDependency(typeof(InitializationModule))]
     internal class CustomizedRenderingInitialization : IInitializableModule
     {
