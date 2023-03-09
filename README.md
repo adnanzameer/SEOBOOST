@@ -10,7 +10,7 @@ The package provides the following helper methods & features:
 * Alternate Links (hreflang attributes)
 * Breadcrumbs items
 
-## How to install
+## How to get started?
 Install NuGet package from Optimizely NuGet Feed:
 
 
