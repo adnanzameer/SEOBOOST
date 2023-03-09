@@ -38,7 +38,7 @@ Then, call `UseSeoBoost` in the `Configure` method:
 app.UseSeoBoost();
 ```
 
-Register custom route if 'robots.txt' not working in the URL
+Register custom route if `robots.txt` not working in the URL
 ```csharp
         app.UseEndpoints(endpoints =>
         {
