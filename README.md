@@ -38,6 +38,17 @@ Then, call `UseSeoBoost` in the `Configure` method:
 app.UseSeoBoost();
 ```
 
+Register route if robots.txt not working in url
+```csharp
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "robots",
+                pattern: "robots.txt",
+                defaults: new { controller = "SBRobotsTxt", action = "Index" });
+        });
+```
+
 [![Platform](https://img.shields.io/badge/Platform-.NET%204.6.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
 [![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
 
