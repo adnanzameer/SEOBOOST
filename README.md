@@ -1,68 +1,33 @@
-# SEOBOOST for Optimizely
+# SEOBOOST for Optimizely (EPiServer) CMS
+
+While SEOBOOST for Optimizely (EPiServer) is a freely available module, if you'd like to express your support, consider treating me to a coffee on Ko-fi:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U2STV29)
 
 ## Description
+[![Platform](https://img.shields.io/badge/Platform-.NET%204.7.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
+[![Platform](https://img.shields.io/badge/Episerver%20-%2011-orange.svg?style=flat)](https://world.episerver.com/cms/)
+
+## Optimizely CMS 12?
+**For ASP.NET 5+ and Episerver/Optimizely 12+ see: https://github.com/adnanzameer/optimizely-seoboost**
+
 This package facilitates developers and editors to improve the SEO ranking of the website by utilizing helper methods & features provided.
 
 ## Features
 The package provides the following helper methods & features:
-* robots.txt
 * Canonical Link 
 * Alternate Links (hreflang attributes)
 * Breadcrumbs items
+* robots.txt
 
-## How to get started?
-Install NuGet package from Optimizely NuGet Feed:
+## How to install
+Install NuGet package from Episerver NuGet Feed:
 
-
-[![Platform](https://img.shields.io/badge/Platform-.NET%205.0-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
-[![Platform](https://img.shields.io/badge/EPiServer-%2012-orange.svg?style=flat)](http://world.episerver.com/cms/)
-
-### .NET Core (.NET 5.0)
-
-
-Start by installing NuGet package (use [Optimizely NuGet](https://nuget.optimizely.com/)):
-
-```
-dotnet add package SeoBoost
-```
-
-Register SEOBOOST in Startup.cs using folllowing service extension 
-
-```csharp
-services.AddSeoBoost();
-```
-
-Then, call `UseSeoBoost` in the `Configure` method:
-
-```csharp
-app.UseSeoBoost();
-```
-
-Register custom route if `robots.txt` not working in the URL
-```csharp
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllerRoute(
-                name: "robots",
-                pattern: "robots.txt",
-                defaults: new { controller = "SBRobotsTxt", action = "Index" });
-        });
-```
-
-[![Platform](https://img.shields.io/badge/Platform-.NET%204.6.1-blue.svg?style=flat)](https://msdn.microsoft.com/en-us/library/w0x726c2%28v=vs.110%29.aspx)
-[![Platform](https://img.shields.io/badge/Episerver-%2011.0.+-orange.svg?style=flat)](http://world.episerver.com/cms/)
-
-### .NET Framework (4.7.1)
-
-Install NuGet package from Optimizely NuGet Feed:
-
-```
     Install-Package SeoBoost
-```
-	
+
 ## How to use
 
-Include the follow **@using SeoBoost.Helper** at top of the Mater page.
+Include the follow **@ using SeoBoost.Helper** at top of the Mater page.
      
 ### Canonical link
 Use the following extension **@Html.GetCanonicalLink()** within **<head></head>** section.
